@@ -8,6 +8,12 @@
   Released into the public domain.
 
   *0: Mainly Based On https://www.youtube.com/watch?v=L_PByyJ9g-I
+  
+  AAA - ATTENZIONE - AAA
+  
+  Libreria modificata per mostrare i pesi della rete in C
+  già nel formato di Arduino per migrare su PROGMEM più 
+  facilmente.
 */
 
 /*
@@ -866,6 +872,7 @@ public:
         Serial.println();
         Serial.println("----------------------");
 
+/*
         for (int i = 0; i < numberOflayers; i++)
         {
             #if defined(USE_PROGMEM)
@@ -874,6 +881,41 @@ public:
                 layers[i].print();
             #endif
         }
+*/
+
+// VORREI QUESTO OUTPUT
+// // It is 1 for each layer [Pretrained Biases ]
+//  const PROGMEM float biases[] = { 1.00, 1.00, 1.00, 0.91 };
+//
+// // It is 4*9 + 9*9 + 9*9 + 9*2  [Pretrained weights]
+//  const PROGMEM float weights[] = {
+//      -0.9578217,  -0.5073918,   0.4170873,   0.4659361, 
+//      ...
+//  };
+
+        int i;
+	    
+        // prima stampo i BIAS
+	    Serial.print("const PROGMEM float biases[] = { ");
+		String virgola = "";
+		for (i = 0; i < numberOflayers; i++)
+        {
+			Serial.print(virgola);
+			virgola = ", ";
+			Serial.print (*layers[i].bias, 10);
+        }
+        Serial.println(" };");
+		
+		// poi stampo i PESI (WEIGHTS)
+	    Serial.print("const PROGMEM float weights[] = { ");
+		virgola = "";
+		for (i = 0; i < numberOflayers; i++)
+        {
+			Serial.print(virgola);
+			virgola = ", ";
+			layers[i].print();
+        }
+        Serial.println(" };");
     }
     #endif
 #pragma endregion NeuralNetwork.cpp
@@ -1374,6 +1416,7 @@ public:
     #if !defined(As__No_Common_Serial_Support) // then Compile:
     void NeuralNetwork::Layer::print()
     { 
+#if 0	
         Serial.print(_numberOfInputs);
         Serial.print(" ");
         Serial.print(_numberOfOutputs);
@@ -1401,7 +1444,27 @@ public:
             Serial.println("");
         }
         Serial.println("----------------------");
-
+#else
+        String virgola = "";
+        for (int i = 0; i < _numberOfOutputs; i++)
+        {
+            for (int j = 0; j < _numberOfInputs; j++)
+            {
+				Serial.print(virgola);
+				virgola = ", ";
+				if (j == 0) { Serial.println(); }
+                #if defined(REDUCE_RAM_WEIGHTS_LVL2)
+                    if (me->weights[me->i_j] > 0) Serial.print(" "); // dont even bothered to opt. here lol
+                    Serial.print(me->weights[me->i_j], 10);
+                    me->i_j++;
+                #else
+                    if (weights[i][j] > 0) Serial.print(" ");
+                    Serial.print(weights[i][j], 10);
+                #endif
+            }
+        }
+        Serial.println();
+#endif
     }
 
     void NeuralNetwork::Layer::print_PROGMEM()

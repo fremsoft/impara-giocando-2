@@ -90,10 +90,10 @@ Servo Servo_1;   /* asse 2, angolo Alfa */
 Servo Servo_2;   /* asse 3, angolo Gamma */
 Servo Servo_3;
 
-#define POTENZIOMETRO_1  0 //A0
-#define POTENZIOMETRO_2  1 //A1
-#define POTENZIOMETRO_3  2 //A2
-#define POTENZIOMETRO_4  3 //A3
+#define POTENZIOMETRO_1  0  //A0
+#define POTENZIOMETRO_2  1  //A1
+#define POTENZIOMETRO_3  2  //A2
+#define POTENZIOMETRO_4  3  //A3
 
 #define SERVO_ASSE_1  4
 #define SERVO_ASSE_2  5
