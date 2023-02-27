@@ -3,7 +3,7 @@
  *  Beta è determinato analiticamente come arcotangente di Y/X e ridotto 
  *  nel range -PI/2 e PI/2.
  *
- *  VEDI LA LEZIONE COMPLETA : https://youtube.com/live/dJgejDh9f24
+ *  VEDI LA LEZIONE COMPLETA : https://youtube.com/live/5trqQZzrbJU
  */
 
 /* Neural Network */
