@@ -3,6 +3,8 @@
  *  comandato usando i tre potenziometri per muovere in X, Y, Z
  *  
  *  VEDI LA LEZIONE COMPLETA : https://youtube.com/live/WL63nk-wrHw
+ *  
+ *  Kit Sonar: https://it.aliexpress.com/item/4000284339692.html
  */
 
 /* Neural Network */
