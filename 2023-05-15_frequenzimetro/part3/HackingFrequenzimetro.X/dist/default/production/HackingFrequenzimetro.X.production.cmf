@@ -1,0 +1,482 @@
+%CMF
+# %PSECTS Section
+# For each object file, details of its psects are enumerated here.
+# The begining of the section is indicated by %PSECTS.  The first
+# line indicates the name of the first object file, e.g.
+#    $foo.obj
+# Each line that follows describes a psect in that object file, until
+# the next object file.  The lines that describe a psect have the
+# format:
+#    <psect name> <class name> <space> <link address> <load addresses> <length> <delta>
+# All addresses and the length are given in unqualified hexadecimal
+# in delta units.  Any other numeric values are decimal.
+%PSECTS
+$dist/default/production\HackingFrequenzimetro.X.production.o
+cinit CODE 0 F F 7 2
+text1 CODE 0 1DD 1DD 43 2
+text2 CODE 0 25F 25F F 2
+text3 CODE 0 16 16 A5 2
+text4 CODE 0 BB BB 93 2
+text5 CODE 0 220 220 3F 2
+text6 CODE 0 14E 14E 8F 2
+maintext CODE 0 276 276 3 2
+cstackCOMMON COMMON 1 70 70 E 1
+cstackBANK0 BANK0 1 20 20 25 1
+intentry CODE 0 4 4 A 2
+bssBANK0 BANK0 1 45 45 C 1
+clrtext CODE 0 26E 26E 8 2
+config CONFIG 4 2007 2007 1 2
+$C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+reset_vec CODE 0 0 0 1 2
+end_init CODE 0 E E 1 2
+config CONFIG 4 2007 2007 1 2
+# %UNUSED Section
+# This section enumerates the unused ranges of each CLASS. Each entry
+# is described on a single line as follows:
+#    <class name> <range> <delta>
+# Addresses given in the range are in hexadecimal and units of delta.
+%UNUSED
+RAM 51-6F 1
+RAM A0-EF 1
+RAM 120-14F 1
+BANK0 51-6F 1
+BANK1 A0-EF 1
+BANK2 120-14F 1
+CONST 1-3 2
+CONST 279-7FF 2
+ENTRY 1-3 2
+ENTRY 279-7FF 2
+IDLOC 2000-2003 2
+STACK A0-EF 1
+CODE 1-3 2
+CODE 279-7FF 2
+SFR0 0-1F 1
+SFR1 80-9F 1
+SFR2 100-11F 1
+SFR3 180-1EF 1
+EEDATA 2100-217F 2
+STRCODE 1-3 2
+STRCODE 279-7FF 2
+STRING 1-3 2
+STRING 279-7FF 2
+# %LINETAB Section
+# This section enumerates the file/line to address mappings.
+# The beginning of the section is indicated by %LINETAB.
+# The first line indicates the name of the first object file, e.g.
+#   $foo.obj
+# Each line that follows describes a single mapping until the next
+# object file.  Mappings have the following format:
+#    <address> <psect name> <class name> ><line number>:<file name>
+# The address is absolute and given given in unqualified hex 
+# in delta units of the psect. All mappings within an object file
+# are in ascending order of addresses.
+# All other numeric values are in decimal.
+%LINETAB
+$dist/default/production\HackingFrequenzimetro.X.production.o
+F cinit CODE >301:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+F cinit CODE >304:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+F cinit CODE >342:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+10 cinit CODE >343:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+11 cinit CODE >344:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+12 cinit CODE >345:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+13 cinit CODE >346:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+14 cinit CODE >352:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+14 cinit CODE >354:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+15 cinit CODE >355:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+4 intentry CODE >29:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+14E text6 CODE >5:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+14E text6 CODE >13:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+151 text6 CODE >14:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+153 text6 CODE >15:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+158 text6 CODE >15:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+15A text6 CODE >15:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+15C text6 CODE >15:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+15E text6 CODE >16:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+160 text6 CODE >17:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+160 text6 CODE >18:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+162 text6 CODE >19:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+167 text6 CODE >19:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+169 text6 CODE >19:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+16B text6 CODE >19:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+16D text6 CODE >20:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+171 text6 CODE >22:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+179 text6 CODE >23:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+17D text6 CODE >23:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+17F text6 CODE >24:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+181 text6 CODE >25:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+183 text6 CODE >26:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+185 text6 CODE >26:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+18C text6 CODE >27:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+190 text6 CODE >25:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+191 text6 CODE >30:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+193 text6 CODE >30:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+19A text6 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+19C text6 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1A0 text6 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1A4 text6 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1A8 text6 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1AA text6 CODE >32:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1AD text6 CODE >32:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1B1 text6 CODE >32:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1B5 text6 CODE >32:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1B8 text6 CODE >33:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1B9 text6 CODE >35:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1BA text6 CODE >35:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1C0 text6 CODE >35:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1C2 text6 CODE >36:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1C6 text6 CODE >38:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1C9 text6 CODE >39:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1CE text6 CODE >39:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1D0 text6 CODE >39:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1D2 text6 CODE >39:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1D4 text6 CODE >40:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+1DC text6 CODE >41:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\aldiv.c
+220 text5 CODE >15:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+220 text5 CODE >119:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+228 text5 CODE >121:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+22A text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+22D text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+22E text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+230 text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+233 text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+234 text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+236 text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+239 text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+23A text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+23C text5 CODE >122:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+23E text5 CODE >123:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+240 text5 CODE >123:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+247 text5 CODE >124:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+248 text5 CODE >124:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+24E text5 CODE >124:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+250 text5 CODE >125:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+254 text5 CODE >125:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+256 text5 CODE >128:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+25E text5 CODE >129:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\Umul32.c
+BB text4 CODE >29:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+BB text4 CODE >31:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+BE text4 CODE >32:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+BF text4 CODE >34:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+C1 text4 CODE >34:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+C5 text4 CODE >37:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+CD text4 CODE >38:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+CE text4 CODE >41:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+D0 text4 CODE >41:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+D4 text4 CODE >43:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+D9 text4 CODE >43:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+DD text4 CODE >43:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+DF text4 CODE >46:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+E5 text4 CODE >46:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+EC text4 CODE >49:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+F8 text4 CODE >49:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+11B text4 CODE >49:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+121 text4 CODE >49:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+127 text4 CODE >49:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+13D text4 CODE >51:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+141 text4 CODE >52:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+143 text4 CODE >57:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+16 text3 CODE >10:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+19 text3 CODE >15:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+1D text3 CODE >16:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+26 text3 CODE >16:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+28 text3 CODE >16:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+2A text3 CODE >16:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+2C text3 CODE >17:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+2D text3 CODE >19:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+35 text3 CODE >20:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+35 text3 CODE >21:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+39 text3 CODE >21:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+3B text3 CODE >22:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+44 text3 CODE >23:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+48 text3 CODE >24:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+4C text3 CODE >25:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+50 text3 CODE >26:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+51 text3 CODE >26:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+57 text3 CODE >26:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+59 text3 CODE >24:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+5A text3 CODE >29:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+5E text3 CODE >30:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+61 text3 CODE >30:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+65 text3 CODE >30:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+69 text3 CODE >30:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+6C text3 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+6D text3 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+73 text3 CODE >31:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+75 text3 CODE >28:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+75 text3 CODE >32:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+7A text3 CODE >33:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+7C text3 CODE >33:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+7E text3 CODE >34:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+80 text3 CODE >35:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+82 text3 CODE >35:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+89 text3 CODE >33:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+8B text3 CODE >37:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+8D text3 CODE >38:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+95 text3 CODE >39:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+97 text3 CODE >40:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+9D text3 CODE >40:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+A3 text3 CODE >40:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+AD text3 CODE >41:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+B1 text3 CODE >42:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+B2 text3 CODE >43:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+BA text3 CODE >44:C:\Program Files\Microchip\xc8\v2.32\pic\sources\c90\common\xxtofl.c
+25F text2 CODE >123:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+25F text2 CODE >128:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+260 text2 CODE >129:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+26C text2 CODE >130:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+26D text2 CODE >134:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1DD text1 CODE >60:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1DD text1 CODE >62:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E1 text1 CODE >63:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E2 text1 CODE >64:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E3 text1 CODE >65:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E4 text1 CODE >66:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E5 text1 CODE >68:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E6 text1 CODE >70:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E7 text1 CODE >71:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E8 text1 CODE >72:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1E9 text1 CODE >74:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1EA text1 CODE >76:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1ED text1 CODE >80:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1EF text1 CODE >82:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1F3 text1 CODE >86:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1F7 text1 CODE >88:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1FA text1 CODE >97:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1FD text1 CODE >102:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+1FE text1 CODE >105:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+202 text1 CODE >106:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+206 text1 CODE >107:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+207 text1 CODE >108:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+20B text1 CODE >111:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+20F text1 CODE >112:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+210 text1 CODE >114:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+212 text1 CODE >115:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+214 text1 CODE >117:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+216 text1 CODE >118:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+21E text1 CODE >120:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+21F text1 CODE >121:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+276 maintext CODE >136:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+276 maintext CODE >137:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+277 maintext CODE >139:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+277 maintext CODE >141:C:\Users\frems\MPLABXProjects\HackingFrequenzimetro.X\main.c
+26E clrtext CODE >329:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+26E clrtext CODE >330:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+26F clrtext CODE >331:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+26F clrtext CODE >332:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+270 clrtext CODE >333:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+271 clrtext CODE >334:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+272 clrtext CODE >335:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+273 clrtext CODE >336:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+274 clrtext CODE >337:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+275 clrtext CODE >338:C:\Users\frems\AppData\Local\Temp\xcAsj7s.s
+# %SYMTAB Section
+# An enumeration of all symbols in the program.
+# The beginning of the section is indicated by %SYMTAB.
+# Each line describes a single symbol as follows:
+#    <label> <value> [-]<load-adj> <class> <space> <psect> <file-name>
+# The value and load-adj are both in unqualified hexadecimal.
+# All other numeric values are in decimal.  The load-adj is the
+# quantity one needs to add to the symbol value in order to obtain the load
+# address of the symbol.  This value may be signed. If the symbol
+# was defined in a psect then <psect> will be "-". File-name
+# is the name of the object file in which the symbol was defined.
+%SYMTAB
+___latbits 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__Hspace_0 279 0 ABS 0 - -
+__Hspace_1 7E 0 ABS 0 - -
+__Hspace_2 0 0 ABS 0 - -
+__Hspace_3 0 0 ABS 0 - -
+__Hspace_4 400F 0 ABS 0 - -
+__Heeprom_data 0 0 EEDATA 3 eeprom_data -
+__Hstrings 0 0 ABS 0 strings -
+_TMR0 1 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+___sp 0 0 STACK 2 stack C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+_loop 4BE 0 CODE 0 text2 dist/default/production\HackingFrequenzimetro.X.production.o
+_main 4EC 0 CODE 0 maintext dist/default/production\HackingFrequenzimetro.X.production.o
+btemp 7E 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+start 1C 0 CODE 0 init C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+__size_of___aldiv 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__size_of_loop 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__size_of_main 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+?___lmul 70 0 COMMON 1 cstackCOMMON dist/default/production\HackingFrequenzimetro.X.production.o
+_OPTION_REGbits 81 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__Hpowerup 0 0 CODE 0 powerup -
+intlevel0 0 0 ENTRY 0 functab C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+intlevel1 0 0 ENTRY 0 functab C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+intlevel2 0 0 ENTRY 0 functab C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+intlevel3 0 0 ENTRY 0 functab C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+intlevel4 0 0 ENTRY 0 functab C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+intlevel5 0 0 ENTRY 0 functab C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+___aldiv@divisor 20 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+_CMCONbits 1F 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+wtemp0 7E 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__Hfunctab 0 0 ENTRY 0 functab -
+___aldiv@sign 29 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__Hclrtext 0 0 ABS 0 clrtext -
+__end_of___lmul 4BE 0 CODE 0 text5 dist/default/production\HackingFrequenzimetro.X.production.o
+__Lmaintext 0 0 ABS 0 maintext -
+__end_of___aldiv 3BA 0 CODE 0 text6 dist/default/production\HackingFrequenzimetro.X.production.o
+_t0_gross_prec 4B 0 BANK0 1 bssBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+___stackhi 0 0 ABS 0 - C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+___stacklo 0 0 ABS 0 - C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+__size_of_setup 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__size_of_tcInt 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+start_initialization 1E 0 CODE 0 cinit dist/default/production\HackingFrequenzimetro.X.production.o
+___aldiv@quotient 2A 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+clear_ram0 4DC 0 CODE 0 clrtext dist/default/production\HackingFrequenzimetro.X.production.o
+__pcstackBANK0 20 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+_TMR0IE 5D 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+_TMR0IF 5A 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+_TMR2IE 461 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+_TMR2IF 61 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+___int_sp 0 0 STACK 2 stack C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+__Hbank0 0 0 ABS 0 bank0 -
+__Hbank1 0 0 ABS 0 bank1 -
+__Hbank2 0 0 ABS 0 bank2 -
+__Hbank3 0 0 BANK3 1 bank3 -
+__Hcinit 2C 0 CODE 0 cinit -
+__Hstack 0 0 STACK 2 stack -
+__size_of___xxtofl 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__Hmaintext 0 0 ABS 0 maintext -
+___xxtofl@arg 41 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+___xxtofl@exp 40 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+___xxtofl@val 37 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__Hcommon 0 0 ABS 0 common -
+__Hconfig 4010 0 CONFIG 4 config -
+__Lbank0 0 0 ABS 0 bank0 -
+__Lbank1 0 0 ABS 0 bank1 -
+__Lbank2 0 0 ABS 0 bank2 -
+__Lbank3 0 0 BANK3 1 bank3 -
+__Lcinit 1E 0 CODE 0 cinit -
+__Lstack 0 0 STACK 2 stack -
+_INTCONbits B 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__Habs1 0 0 ABS 0 abs1 -
+__Hcode 0 0 ABS 0 code -
+__Hinit 1C 0 CODE 0 init -
+__Hsfr0 0 0 ABS 0 sfr0 -
+__Hsfr1 0 0 ABS 0 sfr1 -
+__Hsfr2 0 0 ABS 0 sfr2 -
+__Hsfr3 0 0 ABS 0 sfr3 -
+__Htext 0 0 ABS 0 text -
+__Labs1 0 0 ABS 0 abs1 -
+__Lcode 0 0 ABS 0 code -
+__Linit 1C 0 CODE 0 init -
+__Lsfr0 0 0 ABS 0 sfr0 -
+__Lsfr1 0 0 ABS 0 sfr1 -
+__Lsfr2 0 0 ABS 0 sfr2 -
+__Lsfr3 0 0 ABS 0 sfr3 -
+__Ltext 0 0 ABS 0 text -
+___lmul 440 0 CODE 0 text5 dist/default/production\HackingFrequenzimetro.X.production.o
+__LcstackBANK0 0 0 ABS 0 cstackBANK0 -
+__HcstackCOMMON 0 0 ABS 0 cstackCOMMON -
+_PR2 92 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__S0 279 0 ABS 0 - -
+__S1 7E 0 ABS 0 - -
+__S2 0 0 ABS 0 - -
+__S3 0 0 ABS 0 - -
+saved_w 7E 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+___xxtofl 2C 0 CODE 0 text3 dist/default/production\HackingFrequenzimetro.X.production.o
+_t0_gross 4D 0 BANK0 1 bssBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__Lintentry 8 0 CODE 0 intentry -
+reset_vec 0 0 CODE 0 reset_vec C:\Users\frems\AppData\Local\Temp\xcAsj7s.o
+__end_of___xxtofl 176 0 CODE 0 text3 dist/default/production\HackingFrequenzimetro.X.production.o
+__size_of___lmul 0 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__LbssBANK0 0 0 ABS 0 bssBANK0 -
+_PIE1bits 8C 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+___aldiv 29C 0 CODE 0 text6 dist/default/production\HackingFrequenzimetro.X.production.o
+__pmaintext 4EC 0 CODE 0 maintext dist/default/production\HackingFrequenzimetro.X.production.o
+___lmul@multiplier 70 0 COMMON 1 cstackCOMMON dist/default/production\HackingFrequenzimetro.X.production.o
+__Lcommon 0 0 ABS 0 common -
+__Lconfig 0 0 CONFIG 4 config -
+_t0_ovl 4F 0 BANK0 1 bssBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+_millisecondi 49 0 BANK0 1 bssBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__Lspace_0 0 0 ABS 0 - -
+__Lspace_1 0 0 ABS 0 - -
+__Lspace_2 0 0 ABS 0 - -
+__Lspace_3 0 0 ABS 0 - -
+__Lspace_4 0 0 ABS 0 - -
+__HcstackBANK0 0 0 ABS 0 cstackBANK0 -
+_PIR1bits C 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__Lend_init 1C 0 CODE 0 end_init -
+__LcstackCOMMON 0 0 ABS 0 cstackCOMMON -
+end_of_initialization 28 0 CODE 0 cinit dist/default/production\HackingFrequenzimetro.X.production.o
+__Hintentry 1C 0 CODE 0 intentry -
+__Lstrings 0 0 ABS 0 strings -
+?___aldiv 20 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__Hreset_vec 2 0 CODE 0 reset_vec -
+__HbssBANK0 0 0 ABS 0 bssBANK0 -
+_frequenza 45 0 BANK0 1 bssBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__ptext1 3BA 0 CODE 0 text1 dist/default/production\HackingFrequenzimetro.X.production.o
+__ptext2 4BE 0 CODE 0 text2 dist/default/production\HackingFrequenzimetro.X.production.o
+__ptext3 2C 0 CODE 0 text3 dist/default/production\HackingFrequenzimetro.X.production.o
+__ptext4 176 0 CODE 0 text4 dist/default/production\HackingFrequenzimetro.X.production.o
+__ptext5 440 0 CODE 0 text5 dist/default/production\HackingFrequenzimetro.X.production.o
+__ptext6 29C 0 CODE 0 text6 dist/default/production\HackingFrequenzimetro.X.production.o
+___aldiv@dividend 24 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__Lpowerup 0 0 CODE 0 powerup -
+?___xxtofl 37 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__Leeprom_data 0 0 EEDATA 3 eeprom_data -
+__Lreset_vec 0 0 CODE 0 reset_vec -
+__end_of__initialization 28 0 CODE 0 cinit dist/default/production\HackingFrequenzimetro.X.production.o
+__Lfunctab 0 0 ENTRY 0 functab -
+__Lclrtext 0 0 ABS 0 clrtext -
+___lmul@product 79 0 COMMON 1 cstackCOMMON dist/default/production\HackingFrequenzimetro.X.production.o
+___lmul@multiplicand 74 0 COMMON 1 cstackCOMMON dist/default/production\HackingFrequenzimetro.X.production.o
+__pcstackCOMMON 70 0 COMMON 1 cstackCOMMON dist/default/production\HackingFrequenzimetro.X.production.o
+__Hend_init 1E 0 CODE 0 end_init -
+___aldiv@counter 28 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__end_of_loop 4DC 0 CODE 0 text2 dist/default/production\HackingFrequenzimetro.X.production.o
+__end_of_main 4F2 0 CODE 0 maintext dist/default/production\HackingFrequenzimetro.X.production.o
+_PORTA 5 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+_PORTB 6 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+_TRISA 85 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+_TRISB 86 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+__end_of_setup 440 0 CODE 0 text1 dist/default/production\HackingFrequenzimetro.X.production.o
+__end_of_tcInt 29C 0 CODE 0 text4 dist/default/production\HackingFrequenzimetro.X.production.o
+__Hram 0 0 ABS 0 ram -
+__Lram 0 0 ABS 0 ram -
+interrupt_function 8 0 CODE 0 intentry dist/default/production\HackingFrequenzimetro.X.production.o
+_setup 3BA 0 CODE 0 text1 dist/default/production\HackingFrequenzimetro.X.production.o
+_tcInt 176 0 CODE 0 text4 dist/default/production\HackingFrequenzimetro.X.production.o
+__pintentry 8 0 CODE 0 intentry dist/default/production\HackingFrequenzimetro.X.production.o
+__initialization 1E 0 CODE 0 cinit dist/default/production\HackingFrequenzimetro.X.production.o
+___xxtofl@sign 3F 0 BANK0 1 cstackBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+__pbssBANK0 45 0 BANK0 1 bssBANK0 dist/default/production\HackingFrequenzimetro.X.production.o
+_T2CONbits 12 0 ABS 0 - dist/default/production\HackingFrequenzimetro.X.production.o
+# %SPLITSTAB Section
+# This section enumerates all the psect splits performed by the assembler.
+# The beginning of the section is indicated by %SPLITSTAB.
+# Each line is a record a particular split, where the parent psect is on
+# the left and the child on the right.  Note that a child psect is always
+# split form the top of the parent psect. All splits from a given parent
+# are listed in the order in which they occurred.
+%SPLITSTAB
+# %DABS Section
+# This section contains a table of all usuage of the assember
+# directive DABS in the program. Each line has the following format:
+#   <name> <space> <address> <size>
+# If the DABS was originally labelled then that shall be <name>,
+# otherwise name will be "-".  The <space> number is in decimal.
+# <address> and <size> are in byte units as unqaulified hexadecimal
+%DABS
+- 1 7E 2
+# %SEGMENTS Section
+# This sections enumerates the segments of the program.  Each segment
+# is described on a single line as follows:
+#    <name> <space> <link address> <file address> <size> <delta>
+# Addresses and size are in unqualified hexadecimal.  The link address
+# and size are in units of delta. The file address is in units of bytes.
+# All other numeric quantities are in decimal.
+%SEGMENTS
+cstackCOMMON 1 70 70 E 1
+cstackBANK0 1 20 20 31 1
+intentry 0 4 8 275 2
+reset_vec 0 0 0 1 2
+# %NOTES Section
+# This section contains data of all the note-psects.  The beginning of the section
+# is indicated by %NOTES. The first line indicates the name and decimal
+# byte-length of the first note-psect, e.g.
+#   $codecov_info_hdr 16
+# Each line that follows contains the byte-data of the psect in hexadecimal as a
+# space-separated list. These lines are limited to 16 bytes of data.
+%NOTES
