@@ -1,7 +1,8 @@
 /*
  * Programma per la movimentazione di tre motori passo passo
- * 23HS2430 con controller TB6600 ( https://amzn.to/41r0FO4 )
- * in modo interpolato.
+ * 23HS2430 con controller TB6600 in modo interpolato.
+ *  "Azionamento TB6600"     - https://amzn.to/46pkFEi
+ *  "Motore stepper NEMA 23" - https://amzn.to/3Jr2Evq
  * 
  * IL TB6600 è configurato con i DIP-SW S1-OFF, S2-OFF, S3-ON
  * per avere 16 microstep (200 * 16 = 3200 impulsi/giro)
@@ -18,7 +19,7 @@
  * 6 (CS)    - 10 
  * 
  * Visualizza il progetto integrale su YouTube: 
- * https://www.youtube.com/c/fremsoft
+ * https://youtube.com/live/uFQ9prJWlKU
  *  
  */
 
@@ -46,7 +47,6 @@ long int pos_mot1_futura,   pos_mot2_futura,   pos_mot3_futura;
 #define MAX_POINTS 50
 long int percorso[MAX_POINTS][3];
 int numero_passi, passo_in_esecuzione, passo_precedente;
-
 
 #define PIN_SD_CS  10
 
@@ -82,7 +82,9 @@ void setup() {
   pos_mot1_futura = 0;
   pos_mot2_futura = 0;
   pos_mot3_futura = 0;
-  
+
+
+  /* LETTURA DEL PERCORSO DA MICRO SD */
   numero_passi = 0;
 
   if (!SD.begin( PIN_SD_CS )) {
@@ -160,7 +162,7 @@ void setup() {
 
   numero_passi = i;
   passo_in_esecuzione = 0;
-  passo_precedente = i-1;
+  passo_precedente = 0;
   
   
   pathFile.close();
@@ -176,7 +178,8 @@ void loop() {
     Serial.print(", ");
     Serial.println(pos_mot3_presente);
   }
-   
+
+  /* CALCOLO DELLA MOVIMENTAZIONE DEI MOTORI */
   if (
        ( pos_mot1_presente == percorso[passo_in_esecuzione][0] )
        &&
@@ -185,7 +188,7 @@ void loop() {
        ( pos_mot3_presente == percorso[passo_in_esecuzione][2] )
      )
   {
-    /* sono arrivato a destinazione, procedo verso il prossimopasso */
+    /* sono arrivato a destinazione, procedo verso il prossimo passo */
     passo_precedente = passo_in_esecuzione;
     passo_in_esecuzione ++;
     if ( passo_in_esecuzione >= numero_passi ) {
@@ -265,7 +268,7 @@ void loop() {
     }
   }
   
-
+  /* MOVIMENTAZIONE DEI MOTORI */
   if (pos_mot1_futura > pos_mot1_presente) {
     // GIRA BLU   CW
     digitalWrite( PIN_MOT1_DIR,  HIGH );
@@ -318,6 +321,7 @@ void loop() {
   digitalWrite( PIN_MOT1_PUL, LOW );
   digitalWrite( PIN_MOT2_PUL, LOW );
   digitalWrite( PIN_MOT3_PUL, LOW );
-  delayMicroseconds(10);
 
+  // rallentamento del ciclo 
+  delayMicroseconds(10);
 }

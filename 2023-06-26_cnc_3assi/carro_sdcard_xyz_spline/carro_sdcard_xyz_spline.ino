@@ -1,6 +1,6 @@
 /*
- * Programma per la movimentazione di tre motori passo passo
- * 23HS2430 con controller TB6600 in modo interpolato.
+* Programma per la movimentazione di tre motori passo passo
+ * 23HS2430 con controller TB6600 interpolato mediante spline.
  *  "Azionamento TB6600"     - https://amzn.to/46pkFEi
  *  "Motore stepper NEMA 23" - https://amzn.to/3Jr2Evq
  * 
@@ -55,12 +55,48 @@ long int pos_mot1_futura,   pos_mot2_futura,   pos_mot3_futura;
 long int percorso[MAX_POINTS][3];
 int numero_passi, passo_in_esecuzione, passo_precedente;
 
+unsigned long t0, t1;
+float vel0[3], vel1[3]; /* velocità di partenza e di arrivo del singolo tratto della spline*/
+float coefX[4], coefY[4], coefZ[4];
+
+
 #define MAX_PASSI_HOMING 10000
 
 
 #define PIN_SD_CS  10
 
 File pathFile;
+
+#define DELTA_T_MS           2000
+#define RISOLUZIONE_SPLINE    100.0
+
+const float  T = DELTA_T_MS / RISOLUZIONE_SPLINE;
+
+
+void calcolaCoefficientiSpline(float p0, float p1, float v0, float v1,
+                               float *a, float *b, float *c, float *d ) {
+  /*
+       Hermite  "naturale"
+
+   *   *a = -2.0 * (p1 - p0) / (T * T * T);
+   *   *b =  3.0 * (p1 - p0) / (T * T);
+   *   *c =  0;
+   *   *d =  p0;
+  */
+
+  /*
+       Catmull-Rom
+  */
+  *a = (v1 - v0 - 2.0 * (p1 - v0*T - p0) / T) / (T * T);
+  *b = (p1 - v0*T - p0) / (T * T) - (*a)*T;
+  *c =  v0;
+  *d =  p0;
+
+}
+
+float calcolaSpline(float t, float a, float b, float c, float d) {
+  return a * t * t * t + b * t * t + c * t + d;
+}
 
 void homing() {
   int passi;
@@ -139,6 +175,8 @@ void setup() {
   
   numero_passi = 0;
 
+  t0 = millis();
+  
   if (!SD.begin( PIN_SD_CS )) {
     Serial.println("Errore inizializzazione scheda SD");
     return;
@@ -215,7 +253,26 @@ void setup() {
   numero_passi = i;
   passo_in_esecuzione = 0;
   passo_precedente = i-1;
+
+  vel0[0] = 0;                                             // velocita X di partenza
+  vel1[0] = ( percorso[2][0] - percorso[0][0] ) / (2*T);   // velocita X di arrivo secondo 
+                                                           //    la regola di Catmull-Rom
+  calcolaCoefficientiSpline( percorso[0][0], percorso[1][0], vel0[0], vel1[0],
+                             &coefX[0], &coefX[1], &coefX[2], &coefX[3] );
+
+  vel0[1] = 0;                                             // velocita Y di partenza
+  vel1[1] = ( percorso[2][1] - percorso[0][1] ) / (2*T);   // velocita Y di arrivo secondo 
+                                                           //    la regola di Catmull-Rom
+  calcolaCoefficientiSpline( percorso[0][1], percorso[1][1], vel0[1], vel1[1], 
+                             &coefY[0], &coefY[1], &coefY[2], &coefY[3] );
+
+  vel0[2] = 0;                                             // velocita Z di partenza
+  vel1[2] = ( percorso[2][2] - percorso[0][2] ) / (2*T);   // velocita Z di arrivo secondo 
+                                                           //    la regola di Catmull-Rom
+  calcolaCoefficientiSpline( percorso[0][2], percorso[1][2], vel0[2], vel1[2],
+                             &coefZ[0], &coefZ[1], &coefZ[2], &coefZ[3] );
   
+
   
   pathFile.close();
 
@@ -223,7 +280,7 @@ void setup() {
 }
 
 void loop() {
-  int delta_x, delta_y, delta_z;
+  float t;
 
   if (DEBUG_MODE) {
     Serial.print(pos_mot1_presente);
@@ -232,96 +289,45 @@ void loop() {
     Serial.print(", ");
     Serial.println(pos_mot3_presente);
   }
-   
-  if (
-       ( pos_mot1_presente == percorso[passo_in_esecuzione][0] )
-       &&
-       ( pos_mot2_presente == percorso[passo_in_esecuzione][1] )
-       &&
-       ( pos_mot3_presente == percorso[passo_in_esecuzione][2] )
-     )
-  {
-    /* sono arrivato a destinazione, procedo verso il prossimopasso */
-    passo_precedente = passo_in_esecuzione;
-    passo_in_esecuzione ++;
-    if ( passo_in_esecuzione >= numero_passi ) {
-      passo_in_esecuzione = 0;
-    } 
-  }
-  else
-  {
-    /* sto andando al punto percorso[passo_in_esecuzione] */
+
+  /* CALCOLO DELLA POSIZIONE DEI MOTORI */
+  t = (millis() - t0) / RISOLUZIONE_SPLINE;
+
+  /* devo andare da percorso [passo_precedente] a percorso[passo_in_esecuzione] */
+  pos_mot1_futura = calcolaSpline(t, coefX[0], coefX[1], coefX[2], coefX[3]);
+  pos_mot2_futura = calcolaSpline(t, coefY[0], coefY[1], coefY[2], coefY[3]);
+  pos_mot3_futura = calcolaSpline(t, coefZ[0], coefZ[1], coefZ[2], coefZ[3]);
   
-    // determino il delta maggiore
-    delta_x = percorso[passo_in_esecuzione][0] - percorso[passo_precedente][0];
-    delta_y = percorso[passo_in_esecuzione][1] - percorso[passo_precedente][1];
-    delta_z = percorso[passo_in_esecuzione][2] - percorso[passo_precedente][2];
+  if ( (millis() - t0) >= DELTA_T_MS ) {
+    t0 = millis();
+        
+    vel0[0] = vel1[0];                                         // velocita X di partenza
+    vel1[0] = ( percorso[(passo_in_esecuzione + 2)%numero_passi][0] - 
+                 percorso[passo_in_esecuzione][0] ) / (2*T);   // velocita X di arrivo secondo 
+                                                               //    la regola di Catmull-Rom
+    vel0[1] = vel1[1];                                         // velocita Y di partenza
+    vel1[1] = ( percorso[(passo_in_esecuzione + 2)%numero_passi][1] - 
+                 percorso[passo_in_esecuzione][1] ) / (2*T);   // velocita Y di arrivo secondo 
+                                                               //    la regola di Catmull-Rom
+    vel0[2] = vel1[2];                                         // velocita Z di partenza
+    vel1[2] = ( percorso[(passo_in_esecuzione + 2)%numero_passi][2] - 
+                 percorso[passo_in_esecuzione][2] ) / (2*T);   // velocita di arrivo secondo 
+                                                               //    la regola di Catmull-Rom
+                                                       
+    calcolaCoefficientiSpline( 
+      percorso[passo_in_esecuzione][0], percorso[(passo_in_esecuzione + 1)%numero_passi][0], 
+      vel0[0], vel1[0], &coefX[0], &coefX[1], &coefX[2], &coefX[3] );
+    calcolaCoefficientiSpline( 
+      percorso[passo_in_esecuzione][1], percorso[(passo_in_esecuzione + 1)%numero_passi][1], 
+      vel0[1], vel1[1], &coefY[0], &coefY[1], &coefY[2], &coefY[3] );
+    calcolaCoefficientiSpline( 
+      percorso[passo_in_esecuzione][2], percorso[(passo_in_esecuzione + 1)%numero_passi][2], 
+      vel0[2], vel1[2], &coefZ[0], &coefZ[1], &coefZ[2], &coefZ[3] );
       
-    if (((abs(delta_x) >= abs(delta_y))) && ((abs(delta_x) >= abs(delta_z))))
-    {
-      // comanda l'asse x (mot1)
-      if (percorso[passo_in_esecuzione][0] > pos_mot1_presente) { pos_mot1_futura ++; }
-      if (percorso[passo_in_esecuzione][0] < pos_mot1_presente) { pos_mot1_futura --; }
-
-      // interpolazione motore 2
-      pos_mot2_futura = map(pos_mot1_futura, 
-                            percorso[passo_precedente][0],
-                            percorso[passo_in_esecuzione][0],
-                            percorso[passo_precedente][1],
-                            percorso[passo_in_esecuzione][1]);
-
-      // interpolazione motore 3
-      pos_mot3_futura = map(pos_mot1_futura, 
-                            percorso[passo_precedente][0],
-                            percorso[passo_in_esecuzione][0],
-                            percorso[passo_precedente][2],
-                            percorso[passo_in_esecuzione][2]);
-    }
-    else
-    if (((abs(delta_y) >= abs(delta_x))) && ((abs(delta_y) >= abs(delta_z))))
-    {
-      // comanda l'asse y (mot2)
-      if (percorso[passo_in_esecuzione][1] > pos_mot2_presente) { pos_mot2_futura ++; }
-      if (percorso[passo_in_esecuzione][1] < pos_mot2_presente) { pos_mot2_futura --; }
-
-      // interpolazione motore 1
-      pos_mot1_futura = map(pos_mot2_futura, 
-                            percorso[passo_precedente][1],
-                              percorso[passo_in_esecuzione][1],
-                              percorso[passo_precedente][0],
-                              percorso[passo_in_esecuzione][0]);
-                              
-      // interpolazione motore 3
-      pos_mot3_futura = map(pos_mot2_futura, 
-                            percorso[passo_precedente][1],
-                            percorso[passo_in_esecuzione][1],
-                            percorso[passo_precedente][2],
-                            percorso[passo_in_esecuzione][2]);
-    }
-    else
-    /* if (((abs(delta_z) >= abs(delta_x))) && ((abs(delta_z) >= abs(delta_y)))) */
-    {
-      // comanda l'asse z (mot3)
-      if (percorso[passo_in_esecuzione][2] > pos_mot3_presente) { pos_mot3_futura ++; }
-      if (percorso[passo_in_esecuzione][2] < pos_mot3_presente) { pos_mot3_futura --; }
-
-      // interpolazione motore 1
-      pos_mot1_futura = map(pos_mot3_futura, 
-                            percorso[passo_precedente][2],
-                            percorso[passo_in_esecuzione][2],
-                            percorso[passo_precedente][0],
-                            percorso[passo_in_esecuzione][0]);
-                              
-      // interpolazione motore 2
-      pos_mot2_futura = map(pos_mot3_futura, 
-                            percorso[passo_precedente][2],
-                            percorso[passo_in_esecuzione][2],
-                            percorso[passo_precedente][1],
-                            percorso[passo_in_esecuzione][1]);
-    }
+    passo_in_esecuzione = (passo_in_esecuzione + 1)%numero_passi;
   }
-  
 
+  /* MOVIMENTO DEI MOTORI */
   if (pos_mot1_futura > pos_mot1_presente) {
     // GIRA BLU   CW
     digitalWrite( PIN_MOT1_DIR,  HIGH );
