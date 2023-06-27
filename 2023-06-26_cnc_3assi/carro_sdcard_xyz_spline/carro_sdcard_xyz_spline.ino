@@ -46,8 +46,6 @@
 
 #define DEBUG_MODE false
 
-int contatore;
-
 long int pos_mot1_presente, pos_mot2_presente, pos_mot3_presente;
 long int pos_mot1_futura,   pos_mot2_futura,   pos_mot3_futura;
 
@@ -59,9 +57,7 @@ unsigned long t0, t1;
 float vel0[3], vel1[3]; /* velocità di partenza e di arrivo del singolo tratto della spline*/
 float coefX[4], coefY[4], coefZ[4];
 
-
 #define MAX_PASSI_HOMING 10000
-
 
 #define PIN_SD_CS  10
 
@@ -75,23 +71,24 @@ const float  T = DELTA_T_MS / RISOLUZIONE_SPLINE;
 
 void calcolaCoefficientiSpline(float p0, float p1, float v0, float v1,
                                float *a, float *b, float *c, float *d ) {
-  /*
-       Hermite  "naturale"
+#if false
+       /* 
+        *  Hermite  "naturale"
+        */
 
-   *   *a = -2.0 * (p1 - p0) / (T * T * T);
-   *   *b =  3.0 * (p1 - p0) / (T * T);
-   *   *c =  0;
-   *   *d =  p0;
-  */
-
-  /*
-       Catmull-Rom
-  */
-  *a = (v1 - v0 - 2.0 * (p1 - v0*T - p0) / T) / (T * T);
-  *b = (p1 - v0*T - p0) / (T * T) - (*a)*T;
-  *c =  v0;
-  *d =  p0;
-
+       *a = -2.0 * (p1 - p0) / (T * T * T);
+       *b =  3.0 * (p1 - p0) / (T * T);
+       *c =  0;
+       *d =  p0;
+#else
+       /*       
+        *  Catmull-Rom
+        */
+       *a = (v1 - v0 - 2.0 * (p1 - v0*T - p0) / T) / (T * T);
+       *b = (p1 - v0*T - p0) / (T * T) - (*a)*T;
+       *c =  v0;
+       *d =  p0;
+#endif
 }
 
 float calcolaSpline(float t, float a, float b, float c, float d) {
@@ -105,7 +102,7 @@ void homing() {
   passi = 0;
   while ((passi < MAX_PASSI_HOMING) && (digitalRead(HOMING_X) != 0)) {
     // GIRA BLU   CCW
-    digitalWrite( PIN_MOT1_DIR,  LOW );
+    digitalWrite( PIN_MOT1_DIR,  HIGH );
     delay(1);
     digitalWrite( PIN_MOT1_PUL, HIGH );
     delay(1);
@@ -117,7 +114,7 @@ void homing() {
   passi = 0;
   while ((passi < MAX_PASSI_HOMING) && (digitalRead(HOMING_Y) != 0)) {
     // GIRA VERDE  CCW
-    digitalWrite( PIN_MOT2_DIR,  LOW );
+    digitalWrite( PIN_MOT2_DIR,  HIGH );
     delay(1);
     digitalWrite( PIN_MOT2_PUL, HIGH );
     delay(1);
@@ -129,7 +126,7 @@ void homing() {
   passi = 0;
   while ((passi < MAX_PASSI_HOMING) && (digitalRead(HOMING_Z) != 0)) {
     // GIRA FUCSIA  CCW
-    digitalWrite( PIN_MOT3_DIR,  LOW );
+    digitalWrite( PIN_MOT3_DIR,  HIGH );
     delay(1);
     digitalWrite( PIN_MOT3_PUL, HIGH );
     delay(1);
@@ -164,19 +161,17 @@ void setup() {
   pinMode( HOMING_Y,    INPUT_PULLUP);
   pinMode( HOMING_Z,    INPUT_PULLUP);
 
-  contatore = 0;
-
   pos_mot1_presente = 0;
   pos_mot2_presente = 0;
   pos_mot3_presente = 0;
   pos_mot1_futura = 0;
   pos_mot2_futura = 0;
   pos_mot3_futura = 0;
-  
+
+
+  /* LETTURA DEL PERCORSO DA MICRO SD */
   numero_passi = 0;
 
-  t0 = millis();
-  
   if (!SD.begin( PIN_SD_CS )) {
     Serial.println("Errore inizializzazione scheda SD");
     return;
@@ -250,10 +245,15 @@ void setup() {
     i++;
   }  
 
+  pathFile.close();
+
   numero_passi = i;
   passo_in_esecuzione = 0;
   passo_precedente = i-1;
 
+  /* inizializzazione parametri spline */
+  t0 = millis();
+  
   vel0[0] = 0;                                             // velocita X di partenza
   vel1[0] = ( percorso[2][0] - percorso[0][0] ) / (2*T);   // velocita X di arrivo secondo 
                                                            //    la regola di Catmull-Rom
@@ -274,8 +274,8 @@ void setup() {
   
 
   
-  pathFile.close();
 
+  /* va alla ricerca dei finecorsa per stabilire il punto iniziale */
   homing();
 }
 
@@ -330,7 +330,7 @@ void loop() {
   /* MOVIMENTO DEI MOTORI */
   if (pos_mot1_futura > pos_mot1_presente) {
     // GIRA BLU   CW
-    digitalWrite( PIN_MOT1_DIR,  HIGH );
+    digitalWrite( PIN_MOT1_DIR,  LOW );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT1_PUL, HIGH );
     pos_mot1_presente ++;
@@ -338,7 +338,7 @@ void loop() {
 
   if (pos_mot1_futura < pos_mot1_presente) {
     // GIRA BLU   CCW
-    digitalWrite( PIN_MOT1_DIR,  LOW );
+    digitalWrite( PIN_MOT1_DIR,  HIGH );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT1_PUL, HIGH );
     pos_mot1_presente --;
@@ -346,7 +346,7 @@ void loop() {
 
   if (pos_mot2_futura > pos_mot2_presente) {
     // GIRA VERDE CW
-    digitalWrite( PIN_MOT2_DIR,  HIGH );
+    digitalWrite( PIN_MOT2_DIR,  LOW );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT2_PUL, HIGH );
     pos_mot2_presente ++;
@@ -354,7 +354,7 @@ void loop() {
 
   if (pos_mot2_futura < pos_mot2_presente) {
     // GIRA VERDE CCW
-    digitalWrite( PIN_MOT2_DIR,  LOW );
+    digitalWrite( PIN_MOT2_DIR,  HIGH );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT2_PUL, HIGH );
     pos_mot2_presente --;
@@ -362,7 +362,7 @@ void loop() {
 
   if (pos_mot3_futura > pos_mot3_presente) {
     // GIRA FUCSIA   CW
-    digitalWrite( PIN_MOT3_DIR,  HIGH );
+    digitalWrite( PIN_MOT3_DIR,  LOW );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT3_PUL, HIGH );
     pos_mot3_presente ++;
@@ -370,7 +370,7 @@ void loop() {
 
   if (pos_mot3_futura < pos_mot3_presente) {
     // GIRA FUCSIA   CCW
-    digitalWrite( PIN_MOT3_DIR,  LOW );
+    digitalWrite( PIN_MOT3_DIR,  HIGH );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT3_PUL, HIGH );
     pos_mot3_presente --;

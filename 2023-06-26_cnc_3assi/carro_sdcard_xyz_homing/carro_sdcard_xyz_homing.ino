@@ -46,8 +46,6 @@
 
 #define DEBUG_MODE false
 
-int contatore;
-
 long int pos_mot1_presente, pos_mot2_presente, pos_mot3_presente;
 long int pos_mot1_futura,   pos_mot2_futura,   pos_mot3_futura;
 
@@ -56,7 +54,6 @@ long int percorso[MAX_POINTS][3];
 int numero_passi, passo_in_esecuzione, passo_precedente;
 
 #define MAX_PASSI_HOMING 10000
-
 
 #define PIN_SD_CS  10
 
@@ -69,7 +66,7 @@ void homing() {
   passi = 0;
   while ((passi < MAX_PASSI_HOMING) && (digitalRead(HOMING_X) != 0)) {
     // GIRA BLU   CCW
-    digitalWrite( PIN_MOT1_DIR,  LOW );
+    digitalWrite( PIN_MOT1_DIR,  HIGH );
     delay(1);
     digitalWrite( PIN_MOT1_PUL, HIGH );
     delay(1);
@@ -81,7 +78,7 @@ void homing() {
   passi = 0;
   while ((passi < MAX_PASSI_HOMING) && (digitalRead(HOMING_Y) != 0)) {
     // GIRA VERDE  CCW
-    digitalWrite( PIN_MOT2_DIR,  LOW );
+    digitalWrite( PIN_MOT2_DIR,  HIGH );
     delay(1);
     digitalWrite( PIN_MOT2_PUL, HIGH );
     delay(1);
@@ -93,7 +90,8 @@ void homing() {
   passi = 0;
   while ((passi < MAX_PASSI_HOMING) && (digitalRead(HOMING_Z) != 0)) {
     // GIRA FUCSIA  CCW
-    digitalWrite( PIN_MOT3_DIR,  LOW );
+    digitalWrite( PIN_MOT3_DIR,  HIGH
+    );
     delay(1);
     digitalWrite( PIN_MOT3_PUL, HIGH );
     delay(1);
@@ -128,8 +126,6 @@ void setup() {
   pinMode( HOMING_Y,    INPUT_PULLUP);
   pinMode( HOMING_Z,    INPUT_PULLUP);
 
-  contatore = 0;
-
   pos_mot1_presente = 0;
   pos_mot2_presente = 0;
   pos_mot3_presente = 0;
@@ -137,6 +133,8 @@ void setup() {
   pos_mot2_futura = 0;
   pos_mot3_futura = 0;
   
+
+  /* LETTURA DEL PERCORSO DA MICRO SD */
   numero_passi = 0;
 
   if (!SD.begin( PIN_SD_CS )) {
@@ -211,14 +209,14 @@ void setup() {
 
     i++;
   }  
+  
+  pathFile.close();
 
   numero_passi = i;
   passo_in_esecuzione = 0;
   passo_precedente = i-1;
   
-  
-  pathFile.close();
-
+  /* va alla ricerca dei finecorsa per stabilire il punto iniziale */
   homing();
 }
 
@@ -241,7 +239,7 @@ void loop() {
        ( pos_mot3_presente == percorso[passo_in_esecuzione][2] )
      )
   {
-    /* sono arrivato a destinazione, procedo verso il prossimopasso */
+    /* sono arrivato a destinazione, procedo verso il prossimo passo */
     passo_precedente = passo_in_esecuzione;
     passo_in_esecuzione ++;
     if ( passo_in_esecuzione >= numero_passi ) {
@@ -252,7 +250,7 @@ void loop() {
   {
     /* sto andando al punto percorso[passo_in_esecuzione] */
   
-    // determino il delta maggiore
+    /* determino il delta maggiore */
     delta_x = percorso[passo_in_esecuzione][0] - percorso[passo_precedente][0];
     delta_y = percorso[passo_in_esecuzione][1] - percorso[passo_precedente][1];
     delta_z = percorso[passo_in_esecuzione][2] - percorso[passo_precedente][2];
@@ -322,9 +320,10 @@ void loop() {
   }
   
 
+  /* MOVIMENTAZIONE DEI MOTORI */
   if (pos_mot1_futura > pos_mot1_presente) {
     // GIRA BLU   CW
-    digitalWrite( PIN_MOT1_DIR,  HIGH );
+    digitalWrite( PIN_MOT1_DIR,  LOW );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT1_PUL, HIGH );
     pos_mot1_presente ++;
@@ -332,7 +331,7 @@ void loop() {
 
   if (pos_mot1_futura < pos_mot1_presente) {
     // GIRA BLU   CCW
-    digitalWrite( PIN_MOT1_DIR,  LOW );
+    digitalWrite( PIN_MOT1_DIR,  HIGH );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT1_PUL, HIGH );
     pos_mot1_presente --;
@@ -340,7 +339,7 @@ void loop() {
 
   if (pos_mot2_futura > pos_mot2_presente) {
     // GIRA VERDE CW
-    digitalWrite( PIN_MOT2_DIR,  HIGH );
+    digitalWrite( PIN_MOT2_DIR,  LOW );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT2_PUL, HIGH );
     pos_mot2_presente ++;
@@ -348,7 +347,7 @@ void loop() {
 
   if (pos_mot2_futura < pos_mot2_presente) {
     // GIRA VERDE CCW
-    digitalWrite( PIN_MOT2_DIR,  LOW );
+    digitalWrite( PIN_MOT2_DIR,  HIGH );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT2_PUL, HIGH );
     pos_mot2_presente --;
@@ -356,7 +355,7 @@ void loop() {
 
   if (pos_mot3_futura > pos_mot3_presente) {
     // GIRA FUCSIA   CW
-    digitalWrite( PIN_MOT3_DIR,  HIGH );
+    digitalWrite( PIN_MOT3_DIR,  LOW );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT3_PUL, HIGH );
     pos_mot3_presente ++;
@@ -364,7 +363,7 @@ void loop() {
 
   if (pos_mot3_futura < pos_mot3_presente) {
     // GIRA FUCSIA   CCW
-    digitalWrite( PIN_MOT3_DIR,  LOW );
+    digitalWrite( PIN_MOT3_DIR,  HIGH );
     delayMicroseconds(10);
     digitalWrite( PIN_MOT3_PUL, HIGH );
     pos_mot3_presente --;
