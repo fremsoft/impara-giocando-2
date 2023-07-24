@@ -4,6 +4,7 @@
  *  MH Electronics.
  *  
  *  Al pin  4 è connesso DIR_CLK
+ *  Al pin  7 è connesso DIR_EN (attivo basso)
  *  Al pin  8 è connesso DIR_SER
  *  Al pin 12 è connesso DIR_LATCH
  *  
