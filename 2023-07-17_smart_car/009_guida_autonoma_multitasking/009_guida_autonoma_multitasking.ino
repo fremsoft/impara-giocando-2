@@ -308,31 +308,31 @@ void eseguiAzione() {
 
       switch (cosa_fare) {
         case VAI_A_SX :
-          p_target[0] +=  5;
-          p_target[1] += 10;
-          p_target[2] +=  5;
-          p_target[3] += 10;
+          p_target[0] += 15;
+          p_target[1] += 30;
+          p_target[2] += 15;
+          p_target[3] += 30;
           break;
 
         case VAI_A_DX :
-          p_target[0] += 10;
-          p_target[1] +=  5;
-          p_target[2] += 10;
-          p_target[3] +=  5;
+          p_target[0] += 30;
+          p_target[1] += 15;
+          p_target[2] += 30;
+          p_target[3] += 15;
           break;
 
         case VAI_DRITTO :
-          p_target[0] += 10;
-          p_target[1] += 10;
-          p_target[2] += 10;
-          p_target[3] += 10;
+          p_target[0] += 20;
+          p_target[1] += 20;
+          p_target[2] += 20;
+          p_target[3] += 20;
           break;
 
         case GIRA_90_GRADI :
-          p_target[0] += 10;
-          p_target[1] -= 10;
-          p_target[2] += 10;
-          p_target[3] -= 10;
+          p_target[0] += 20;
+          p_target[1] -= 20;
+          p_target[2] += 20;
+          p_target[3] -= 20;
           break;
         default : 
           break;
