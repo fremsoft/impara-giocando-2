@@ -2,7 +2,7 @@
  *  Questo Sketch serve a testare le funzionalità
  *  del servomotore SG90 con shield MH Electronics.
  *  
- *  Al pin 10 è connesso 
+ *  Al pin 10 è connesso il servomotore
  *  
  *  Visualizza l'esperienza di laboratorio completa:  
  *  https://youtube.com/live/7llBNC1qa5o
