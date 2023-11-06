@@ -47,7 +47,6 @@ int pictureNumber = 0;
 void setup() {
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
   Serial.begin(115200);
- 
   Serial.setDebugOutput(true);
  
   camera_config_t config;
@@ -191,6 +190,7 @@ void setup() {
     EEPROM.commit();
   }
   file.close();
+  
   esp_camera_fb_return(fb);
   
   delay(1000);
@@ -210,5 +210,5 @@ void setup() {
 } 
  
 void loop() {
- 
+  /* do nothing */
 }
