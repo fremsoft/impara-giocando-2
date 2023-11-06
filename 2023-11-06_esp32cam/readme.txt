@@ -1,6 +1,6 @@
 Risorse gratuite:
 
-1. [Primi passi](https://youtube.com/live/iDwJ_sivwzE)
+1. (Primi passi)[https://youtube.com/live/iDwJ_sivwzE]
 
 https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
  oppure
