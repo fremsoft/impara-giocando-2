@@ -8,6 +8,8 @@ https://dl.espressif.com/dl/package_esp32_index.json
 
 https://www.espressif.com/
 
+https://docs.ai-thinker.com/en/esp32-cam
+
 https://github.com/espressif/esp32-camera
 
 https://www.espressif.com/en/news/ESP32_CAM
