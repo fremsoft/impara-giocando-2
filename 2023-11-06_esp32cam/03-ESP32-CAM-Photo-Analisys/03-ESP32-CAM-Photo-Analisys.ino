@@ -4,7 +4,7 @@
  *  direttamente a bordo di ESP32-CAM
  *  
  *  Visualizza l'esperienza di laboratorio completa:  
- *  https://youtube.com/live/iDwJ_sivwzE
+ *  https://youtube.com/live/L2ZLrRTSaOo
  *  
  */
   
