@@ -3,10 +3,10 @@
  *  acquisite con la telecamera di ESP32-CAM
  *  direttamente a bordo di ESP32-CAM
  *  
- *  Viene mostrato su monitor seriale il valore 
- *  delle tre componenti cromatiche (r, g, b) di
- *  ogni pixel.
- *  
+ *  Vengono cercati gli oggetti più rossi 
+ *  all'interno della figura analizzando il rapporto
+ *  tra la componente rossa e le altre due
+ *    
  *  Visualizza l'esperienza di laboratorio completa:  
  *  https://youtube.com/live/L2ZLrRTSaOo
  *  
@@ -99,7 +99,6 @@ void setup() {
   pinMode(LED_GPIO_NUM, INPUT);
   digitalWrite(LED_GPIO_NUM, LOW);
   rtc_gpio_hold_dis(GPIO_NUM_4);
-  
  /*
   * ACCENSIONE DEL FLASH SU GPIO4
   * 
@@ -198,7 +197,7 @@ typedef enum {
   s->set_dcw(s, 1);
   // COLOR BAR PATTERN (0 = Disable , 1 = Enable)
   s->set_colorbar(s, 0);
-  */
+*/
 
   pictureNumber = 0;
   fb = NULL;
@@ -207,7 +206,8 @@ typedef enum {
 void loop() {
   uint32_t i; 
   int x, y, r, g, b;
-  
+  int maxx, maxy, maxr, maxg, maxb;
+
   // Take Picture with Camera
   fb = esp_camera_fb_get();  
   if(!fb) {
@@ -215,40 +215,56 @@ void loop() {
     return;
   }
 
+/*
   Serial.print("Acquisito immagine ");
   Serial.print( fb->len / 2 );
   Serial.println(" pixel in formato RGB565");
+*/
 
   i=0, x=0, y=0;
+  maxx = 0, maxy = 0, maxr = 0, maxg = 0, maxb = 0;
   while (i < fb->len) {
 
     r  = (fb->buf[i] & 0xF8);       // estraggo la componente RED
     g  = (fb->buf[i] << 5) & 0xE0;  // estraggo la componente MSB del GREEN
     i++;
-    
+       
     g |= (fb->buf[i] >> 3) & 0x1C;  // estraggo la componente LSB del GREEN
     b  = (fb->buf[i] << 3) & 0xF8;  // estraggo la componente BLUE
     i++; 
 
-    if (( x%10 == 0 ) && ( y%10 == 0)) {
-      Serial.print("x:");
-      Serial.print(x);
-      Serial.print(", y:");
-      Serial.print(y);
+    /* cerco il pixel piu' rosso di tutti */
+//    if (( x%10 == 0 ) && ( y%10 == 0)) {
+      if (
+           ((r/(g+1)) > (maxr/(maxg+1)))
+         &&
+           ((r/(b+1)) > (maxr/(maxb+1)))
+         )
+       {
+          // questo è il pixel più rosso tra quelli gia analizzati
+          maxx = x; maxy = y;
+          maxr = r; maxg = g; maxb = b;
+       }
+//    }
     
-      Serial.print(", r:");
-      Serial.print(r);
-      Serial.print(", g:");
-      Serial.print(g);
-      Serial.print(", b:");
-      Serial.println(b);
-    }
-    
+   
     x++; if (x >= fb->width) { x = 0; y++; }
   }
 
+  Serial.print("x:");
+  Serial.print(maxx);
+  Serial.print(", y:");
+  Serial.print(maxy);
+    
+  Serial.print(", r:");
+  Serial.print(maxr);
+  Serial.print(", g:");
+  Serial.print(maxg);
+  Serial.print(", b:");
+  Serial.println(maxb);
+  
   // libera le risorse
   esp_camera_fb_return(fb);
   
-  delay(5000);
+  delay(50);
 }

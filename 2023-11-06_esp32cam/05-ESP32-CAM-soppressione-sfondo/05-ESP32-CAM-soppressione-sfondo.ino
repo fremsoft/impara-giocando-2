@@ -3,9 +3,10 @@
  *  acquisite con la telecamera di ESP32-CAM
  *  direttamente a bordo di ESP32-CAM
  *  
- *  Viene mostrato su monitor seriale il valore 
- *  delle tre componenti cromatiche (r, g, b) di
- *  ogni pixel.
+ *  Viene memorizzato lo sfondo in un array per 
+ *  ogni componente cromatica (r, g, b) e vengono 
+ *  cercati oggetti all'interno della figura 
+ *  con la tecnica della soprpessione dello sfondo.
  *  
  *  Visualizza l'esperienza di laboratorio completa:  
  *  https://youtube.com/live/L2ZLrRTSaOo
@@ -53,6 +54,13 @@ typedef struct {
 */
 camera_fb_t *fb;
 int pictureNumber;
+
+#define FB_WIDTH  160
+#define FB_HEIGHT 120
+
+uint8_t bg_r[FB_WIDTH][FB_HEIGHT];
+uint8_t bg_g[FB_WIDTH][FB_HEIGHT];
+uint8_t bg_b[FB_WIDTH][FB_HEIGHT];
   
 void setup() {
   WRITE_PERI_REG(RTC_CNTL_BROWN_OUT_REG, 0); //disable brownout detector
@@ -99,7 +107,6 @@ void setup() {
   pinMode(LED_GPIO_NUM, INPUT);
   digitalWrite(LED_GPIO_NUM, LOW);
   rtc_gpio_hold_dis(GPIO_NUM_4);
-  
  /*
   * ACCENSIONE DEL FLASH SU GPIO4
   * 
@@ -198,7 +205,7 @@ typedef enum {
   s->set_dcw(s, 1);
   // COLOR BAR PATTERN (0 = Disable , 1 = Enable)
   s->set_colorbar(s, 0);
-  */
+*/
 
   pictureNumber = 0;
   fb = NULL;
@@ -207,7 +214,8 @@ typedef enum {
 void loop() {
   uint32_t i; 
   int x, y, r, g, b;
-  
+  int maxx, maxy, diff, maxdiff;
+
   // Take Picture with Camera
   fb = esp_camera_fb_get();  
   if(!fb) {
@@ -215,11 +223,14 @@ void loop() {
     return;
   }
 
+/*
   Serial.print("Acquisito immagine ");
   Serial.print( fb->len / 2 );
   Serial.println(" pixel in formato RGB565");
+*/
 
   i=0, x=0, y=0;
+  maxx = 0, maxy = 0, maxdiff = 0;
   while (i < fb->len) {
 
     r  = (fb->buf[i] & 0xF8);       // estraggo la componente RED
@@ -230,25 +241,36 @@ void loop() {
     b  = (fb->buf[i] << 3) & 0xF8;  // estraggo la componente BLUE
     i++; 
 
+    /* cerco il pixel piu' diverso di tutti */
+    /* rispetto allo sfondo                 */
     if (( x%10 == 0 ) && ( y%10 == 0)) {
-      Serial.print("x:");
-      Serial.print(x);
-      Serial.print(", y:");
-      Serial.print(y);
-    
-      Serial.print(", r:");
-      Serial.print(r);
-      Serial.print(", g:");
-      Serial.print(g);
-      Serial.print(", b:");
-      Serial.println(b);
+      diff = abs(r - bg_r[x][y]) + abs(g - bg_g[x][y]) + abs(b - bg_b[x][y]);
+      if ( diff > maxdiff ) {
+          // questo è il pixel più diverso rispetto allo sfondo
+          // tra quelli gia analizzati
+          maxx = x; maxy = y;
+          maxdiff = diff;
+      }
     }
+    
+    // registrazione dello sfondo
+    bg_r[x][y] = (((uint16_t)(bg_r[x][y]) * 7) + r) / 8;
+    bg_g[x][y] = (((uint16_t)(bg_g[x][y]) * 7) + g) / 8;
+    bg_b[x][y] = (((uint16_t)(bg_b[x][y]) * 7) + b) / 8;
     
     x++; if (x >= fb->width) { x = 0; y++; }
   }
 
+  Serial.print("x:");
+  Serial.print(maxx);
+  Serial.print(", y:");
+  Serial.print(maxy);
+    
+  Serial.print(", diff:");
+  Serial.println(maxdiff);
+    
   // libera le risorse
   esp_camera_fb_return(fb);
   
-  delay(5000);
+  delay(50);
 }
