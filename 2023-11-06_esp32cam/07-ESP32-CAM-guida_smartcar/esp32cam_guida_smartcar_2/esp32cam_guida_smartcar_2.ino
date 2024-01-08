@@ -94,6 +94,8 @@
 #define EI_CAMERA_RAW_FRAME_BUFFER_ROWS           240
 #define EI_CAMERA_FRAME_BYTE_SIZE                 3
 
+#define T_CURVA_MS                                1000
+
 /* Private variables ------------------------------------------------------- */
 static bool debug_nn = false; // Set this to true to see e.g. features generated from the raw signal
 static bool is_initialised = false;
@@ -132,6 +134,9 @@ static camera_config_t camera_config = {
     .grab_mode = CAMERA_GRAB_WHEN_EMPTY,
 };
 
+int comando_attuale; // 0=stop, 1=run, 2=left, 3=right
+unsigned long last_t_comando; 
+
 /* Function definitions ------------------------------------------------------- */
 bool ei_camera_init(void);
 void ei_camera_deinit(void);
@@ -156,6 +161,9 @@ void setup()
 
     ei_printf("\nStarting continious inference in 2 seconds...\n");
     ei_sleep(2000);
+
+    comando_attuale=0; // 0=stop, 1=run, 2=left, 3=right
+    last_t_comando = millis();; 
 }
 
 /**
@@ -165,6 +173,20 @@ void setup()
 */
 void loop()
 {
+
+  if (comando_attuale > 1) {
+    if ((millis() - last_t_comando) > T_CURVA_MS) {
+
+      //ei_printf("GO !!!\r\n");
+      ei_printf("{cmd:\"RUN\", sx: 250, dx: 250}\r\n");
+
+      comando_attuale=1; // 0=stop, 1=run, 2=left, 3=right
+      last_t_comando = millis();
+    }
+  }
+
+
+
 
     // instead of wait_ms, we'll wait on the signal, this allows threads to cancel us...
     if (ei_sleep(5) != EI_IMPULSE_OK) {
@@ -199,8 +221,8 @@ void loop()
     }
 
     // print the predictions
-    ei_printf("\rPredictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \r",
-                result.timing.dsp, result.timing.classification, result.timing.anomaly);
+    //ei_printf("\rPredictions (DSP: %d ms., Classification: %d ms., Anomaly: %d ms.): \r",
+    //            result.timing.dsp, result.timing.classification, result.timing.anomaly);
 
 #if EI_CLASSIFIER_OBJECT_DETECTION == 1
     bool bb_found = result.bounding_boxes[0].value > 0;
@@ -209,7 +231,64 @@ void loop()
         if (bb.value == 0) {
             continue;
         }
-        ei_printf("\r\n    %s (%f) [ x: %u, y: %u, width: %u, height: %u ]\n", bb.label, bb.value, bb.x, bb.y, bb.width, bb.height);
+        //ei_printf("\r\n    %s (%f) [ x: %u, y: %u, width: %u, height: %u ]\n", bb.label, bb.value, bb.x, bb.y, bb.width, bb.height);
+
+        // bb.label cotiene la stringa che rappresenta ciò che è stato riconosciuto dalla AI
+        // bb.value contiene la "percentuale" di accuratezza del riconoscimento da 0(minimo) a 1(massimo)
+
+        if ( bb.value > 0.75 ) {
+
+          if (strcmp( bb.label , "go" ) == 0) {
+
+            // diciamo di partire
+            //ei_printf("GO !!!\r\n");
+            ei_printf("{cmd:\"RUN\", sx: 250, dx: 250}\r\n");
+           
+            if (comando_attuale != 1) { 
+              comando_attuale=1; // 0=stop, 1=run, 2=left, 3=right
+              last_t_comando = millis();
+            }
+          }
+          else
+          if (strcmp( bb.label , "stop" ) == 0) {
+
+            // diciamo di fermarsi
+            //ei_printf("STOP !!!\r\n");
+            ei_printf("{cmd:\"RUN\", sx: 0, dx: 0}\r\n");
+
+            if (comando_attuale != 0) { 
+              comando_attuale=0; // 0=stop, 1=run, 2=left, 3=right
+              last_t_comando = millis();
+            }
+          }
+          else
+          if (strcmp( bb.label , "left" ) == 0) {
+
+            // diciamo di svoltare a sinistra
+            //ei_printf("LEFT !!!\r\n");
+            ei_printf("{cmd:\"RUN\", sx: 0, dx: 250}\r\n");
+
+
+            if (comando_attuale != 2) { 
+              comando_attuale=2; // 0=stop, 1=run, 2=left, 3=right
+              last_t_comando = millis();
+            }
+          }
+          else
+          if (strcmp( bb.label , "right" ) == 0) {
+
+            // diciamo di svoltare a destra
+            //ei_printf("RIGHT !!!\r\n");
+            ei_printf("{cmd:\"RUN\", sx: 250, dx: 0}\r\n");
+
+            if (comando_attuale != 3) {     
+              comando_attuale=3; // 0=stop, 1=run, 2=left, 3=right
+              last_t_comando = millis();
+            }
+          }       
+
+        }
+
     }
     if (!bb_found) {
         //ei_printf("    No objects found\n");
