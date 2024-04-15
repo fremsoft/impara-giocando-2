@@ -1,0 +1,6 @@
+Ref,Val,Package,PosX,PosY,Rot,Side
+"POW1","A4988","PinSocket_1x08_P2.54mm_Vertical",146.000000,-74.650000,-90.000000,bottom
+"POW2","Conn_01x08_Pin","PinSocket_1x08_P2.54mm_Vertical",146.000000,-87.350000,-90.000000,bottom
+"X1","IN","PinHeader_1x04_P2.54mm_Vertical",136.094000,-92.684000,180.000000,bottom
+"X2","OUT","PinHeader_1x04_P2.54mm_Vertical",156.135000,-92.694000,180.000000,bottom
+"X3","MOTOR","TBL002A-350-04GR-2OR",150.500000,-96.982000,180.000000,bottom
