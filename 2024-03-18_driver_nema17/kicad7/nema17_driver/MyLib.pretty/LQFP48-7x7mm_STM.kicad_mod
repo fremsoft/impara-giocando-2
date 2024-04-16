@@ -170,4 +170,9 @@
   (pad "46" smd rect (at -1.749999 -4.249999 90) (size 1.1938 0.3048) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp d64eaf80-e851-44c0-aa3a-bc9edadb42df))
   (pad "47" smd rect (at -2.250001 -4.249999 90) (size 1.1938 0.3048) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 1bbcba95-14f9-40a8-a09c-644ed50d6a60))
   (pad "48" smd rect (at -2.75 -4.249999 90) (size 1.1938 0.3048) (layers "F.Cu" "F.Paste" "F.Mask") (tstamp 8ff93638-501f-469b-a3ac-c96950ca39ba))
+  (model "C:/Users/frems/Desktop/Nema17_driver/doc/stm32/KiCADv6/LQFP48-7x7mm_STM.step"
+    (offset (xyz 0 0 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
 )

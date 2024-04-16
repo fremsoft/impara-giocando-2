@@ -27,4 +27,9 @@
   (pad "2" thru_hole circle (at 3.5 0) (size 2.54 2.54) (drill 1.2) (layers "*.Cu" "*.Mask") (tstamp f5f3f5ce-cebb-4ef3-8342-ad88c0166b10))
   (pad "3" thru_hole circle (at 7 -5) (size 2.54 2.54) (drill 1.2) (layers "*.Cu" "*.Mask") (tstamp d55239bf-4300-489d-b47c-0ae4f35d219a))
   (pad "4" thru_hole circle (at 10.5 0) (size 2.54 2.54) (drill 1.2) (layers "*.Cu" "*.Mask") (tstamp a6a34652-60db-485d-9449-b71c222832a7))
+  (model "C:/Users/frems/Desktop/Nema17_driver/doc/CUI_DEVICES_TBL002A-350-04GR-2OR.step"
+    (offset (xyz 1.75 7.4 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz -90 0 90))
+  )
 )
