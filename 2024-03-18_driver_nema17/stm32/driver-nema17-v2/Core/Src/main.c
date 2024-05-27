@@ -43,7 +43,7 @@
 #define RX_BUFFER_SIZE 256
 #define TX_BUFFER_SIZE 512
 #define JSON_TOKEN_NOT_FOUND  0xFFFF
-#define DEVICE_ID_BROADCAST     0xFF
+#define DEVICE_ID_BROADCAST    0x100
 #define SAFETY_GAP                40
 
 #define EN_TX_485() { HAL_GPIO_WritePin(U1_TXEN_485_GPIO_Port, U1_TXEN_485_Pin, 1); }
@@ -230,8 +230,10 @@ int main(void)
   if (HAL_ADC_Start_DMA(&hadc1, (uint32_t *)anValues, 3) != HAL_OK) { Error_Handler(); }
 
   // invio stringa di debug
-  sprintf((char *)txBuffer, "\r\n" VERSION "\r\n");
+  sprintf((char *)txBuffer, "\r\n" VERSION );
   HAL_UART_Transmit(&huart2,  txBuffer, strlen((char *)txBuffer), 100);
+  sprintf((char *)txBuffer, "\r\n----\r\nDevice ID: %d\r\n\r\n", device_id);
+  HAL_UART_Transmit(&huart2,  txBuffer, strlen((char *)txBuffer), 100);			  
 
   /* USER CODE END 2 */
 
@@ -321,7 +323,7 @@ int main(void)
 	  if ((json1 == device_id) || (json1 == DEVICE_ID_BROADCAST)) {
 
 		  // attendo un attimo per consentire lo switch TX->RX al master
-		  HAL_Delay(1);
+		  HAL_Delay(2);
 
 		  // invio stringa di debug
 		  //sprintf((char *)txBuffer, "<-- %s\n\r", rxBuffer);
@@ -459,7 +461,7 @@ int main(void)
 
 	 		  // preparo la stringa con due byte di stuffing avanti e indietro
  			  sprintf((char *)txBuffer, "  {id:%d,ack:0,rnd:%d,csum:%d}\n ",
- 	  				              device_id, rnd, device_id + 1 + rnd );
+ 	  				              device_id, rnd, device_id + 0 + rnd );
 
  			  // se Timeout != 0 la Transmit è bloccante
  			  HAL_UART_Transmit(&huart1,  txBuffer, strlen((char *)txBuffer), 100);
@@ -467,8 +469,10 @@ int main(void)
  			  EN_RX_485();
 
 	 	  }
-
-	 	  // riavvia la ricezione per un'altra stringa
+	  }
+	  
+	  if (json1 != JSON_TOKEN_NOT_FOUND) {
+		  // riavvia la ricezione per un'altra stringa
 	 	  memset(rxBuffer, 0, RX_BUFFER_SIZE);
 	 	  rxIndex = 0;
 	  }

@@ -42,7 +42,8 @@
 
 #define RX_BUFFER_SIZE 256
 #define TX_BUFFER_SIZE 512
-#define JSON_TOKEN_NOT_FOUND 0xFFFF
+#define JSON_TOKEN_NOT_FOUND  0xFFFF
+#define DEVICE_ID_BROADCAST    0x100
 
 #define EN_TX_485() { HAL_GPIO_WritePin(U1_TXEN_485_GPIO_Port, U1_TXEN_485_Pin, 1); }
 #define EN_RX_485() { HAL_GPIO_WritePin(U1_TXEN_485_GPIO_Port, U1_TXEN_485_Pin, 0); }
@@ -440,9 +441,9 @@ int main(void)
 		  HAL_UART_Transmit(&huart2,  txBuffer, strlen((char *)txBuffer), 100);
 
 		  json6 = 1;
-		  csum = 255+json6+json7;
+		  csum = DEVICE_ID_BROADCAST+json6+json7;
 		  sprintf((char *)txBuffer, "     {id:%d,go:%ld,rnd:%ld,csum:%ld}"
- 			 , 255 /* broadcast */
+ 			 , DEVICE_ID_BROADCAST /* broadcast */
 			 , json6 /* go */
 			 , json7, csum);
 		  EN_TX_485();   // IDLE VCC
