@@ -1,0 +1,4 @@
+Ref,Val,Package,PosX,PosY,Rot,Side
+"DL1","ST","LED_D5.0mm",94.805000,-120.095000,0.000000,bottom
+"ENC1","RotaryEncoder_Switch","RotaryEncoder_Alps_EC11E-Switch_Vertical_H20mm",99.210000,-97.515000,90.000000,bottom
+"U2","TFT_320x240","TFT-320x240-SDCARD",163.606902,-85.830700,-90.000000,bottom
