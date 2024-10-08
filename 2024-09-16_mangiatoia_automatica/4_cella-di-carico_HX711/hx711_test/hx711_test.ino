@@ -1,16 +1,19 @@
-// HX711
-
 /* 
- *  fintanto che attendiamo che la conversione sia pronta per essere letta
- *  DT è alto e SCK deve essere mantenuto basso
+ *  HX711 con cella di carico portata 1kg: https://amzn.to/3Yh4EhE
+ * 
+ *  Funzionamento: durante la conversione SCK deve essere mantenuto
+ *  a livello basso e DT (dato) viene mantenuto alto da HX711.
  *  
  *  Quando DT va basso vuol dire che il dato è pronto
  *  con 25, 26 o 27 colpi di clock uscirà il dato
- *  partendo dal MSB per 24 bit, dopodichè DT andrà alto.
+ *  partendo dal MSB per 24 bit, dopodichè DT tonrerà alto.
  *  
  *  Sul fronte di salita di SCK viene caricato il bit,
- *  e sul fronte di discesa viene letto.
+ *  e sul fronte di discesa viene letto da Arduino.
  *  
+ *  Il numero di colpi di clock serve a programmare il 
+ *  funzionamento di HX711 : 
+ *
  *  Se il totale di ck è 25, la prossima acquisizione sarà 
  *  su CH-A con gain 128.
  *  
@@ -19,6 +22,10 @@
  *  
  *  Se il totale di ck è 27, la prossima acquisizione sarà 
  *  su CH-A con gain 64.
+ *
+ *  Guarda la sessione di laboratorio completa:
+ *  https://youtube.com/live/ZQKU0g_QKqY
+ *
  */
 
 #define HX711_DT   3
