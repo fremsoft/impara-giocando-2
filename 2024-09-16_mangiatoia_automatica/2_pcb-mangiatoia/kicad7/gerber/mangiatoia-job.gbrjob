@@ -5,13 +5,13 @@
       "Application": "Pcbnew",
       "Version": "7.0.1"
     },
-    "CreationDate": "2024-09-24T21:19:13+02:00"
+    "CreationDate": "2024-11-06T10:01:19+01:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
       "Name": "mangiatoia",
       "GUID": "6d616e67-6961-4746-9f69-612e6b696361",
-      "Revision": "1.0"
+      "Revision": "1.1"
     },
     "Size": {
       "X": 140.1,
@@ -24,8 +24,8 @@
   "DesignRules": [
     {
       "Layers": "Outer",
-      "PadToPad": 0.0,
-      "PadToTrack": 0.0,
+      "PadToPad": 0.2,
+      "PadToTrack": 0.2,
       "TrackToTrack": 0.2,
       "MinLineWidth": 0.3048,
       "TrackToRegion": 0.5,
