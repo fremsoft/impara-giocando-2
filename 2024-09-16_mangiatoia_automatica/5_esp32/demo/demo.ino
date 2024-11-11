@@ -1,8 +1,8 @@
 // Programma di test per TFT 2.8"
-// da utilizzare sulla scheda MAEDC v1.0
+// da utilizzare sulla scheda MAEDC v1.1
 //
 // guarda la lezione integrale:
-// https://www.youtube.com/live/ObEYt9QQGqc
+// https://www.youtube.com/live/YLyMxRAc3R0
 
 // Questo sketch usa la libreria:
 //  - TFT_eSPI by Bodmer        v2.5.43 (per TFT e TOUCH)
@@ -11,16 +11,16 @@
 //
 // Definizione dei pin in Users\...\Documenti\Arduino\libraries\TFT_eSPI\User_Setup.h
 
-/*
-    Non c'è touch screen
 
 #define TFT_CS    5
 #define TFT_DC    21
 #define TFT_RST   22
+
 #define TOUCH_CS  15
 #define TOUCH_IRQ 14
 
-    E nemmeno SD CARD
+/*
+  non c'è SD CARD
 #define SD_CS     13
 */
 
@@ -32,12 +32,12 @@
 #define SCREEN_W 320
 #define SCREEN_H 240
 
+#define PIN_LED  32
+
 // Inizializzazione del display TFT
 TFT_eSPI tft = TFT_eSPI(); 
 
-#ifdef USE_TOUCH
-int16_t calData[5];
-#endif
+//int16_t calData[5];
 
 void setup() {
 
@@ -46,7 +46,8 @@ void setup() {
   Serial2.begin(19200, SERIAL_8N1, 16, 17);
   Serial.println("Serial2 configurata su RX 16 e TX 17");
 
-  pinMode(12, OUTPUT);   // LED 
+  pinMode(PIN_LED, OUTPUT);   // LED 
+  digitalWrite(PIN_LED, LOW);
 
   // Inizializzazione TFT
   tft.init();
@@ -65,6 +66,35 @@ void setup() {
 // the loop function runs over and over again forever
 void loop() {
 
-  /* do nothing */
+  uint16_t x, y, z;
 
+  tft.getTouchRaw(&x, &y);
+  z = tft.getTouchRawZ();
+
+  Serial.printf("x:%i\t,", x);
+  Serial.printf("y:%i\t,", y);
+  Serial.printf("z:%i\n" , z);
+
+  /*              x     y
+     alto  sx = 3800, 3700
+     basso sx =  320, 3700
+     alto  dx = 3700,  390
+     basso dx =  320,  270
+
+     praticamente la x e la y si scambiano di posto!
+   */
+  if (z > 400) {
+    digitalWrite(PIN_LED, HIGH);
+
+    tft.fillRect(
+          constrain(map(y, 3700, 300, 0, 320), 0, 314),
+          constrain(map(x, 3800, 320, 0, 240), 0, 234),
+          5, 5, TFT_YELLOW /* 0b11111 111111 00000 */
+    );
+  }
+  else {
+    digitalWrite(PIN_LED, LOW);
+  }
+  
+  delay(25);
 }
