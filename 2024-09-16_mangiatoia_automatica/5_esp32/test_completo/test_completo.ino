@@ -1,7 +1,7 @@
 // Programma di test generale per scheda MAEDC v1.1
 //
 // guarda la lezione integrale:
-// https://www.youtube.com/live/YLyMxRAc3R0
+// https://youtube.com/live/nYx8_4_whlc
 
 // Questo sketch usa le seguenti librerie:
 //  - TFT_eSPI by Bodmer                 v2.5.43 (per TFT e TOUCH)
