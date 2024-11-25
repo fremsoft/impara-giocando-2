@@ -18,12 +18,11 @@
 
 extern TFT_eSPI tft;
 
+#include "settings.h"
+
 void setup() {
 
   Serial.begin(115200);
-
-  Serial2.begin(19200, SERIAL_8N1, 16, 17);
-  Serial.println("Serial2 configurata su RX 16 e TX 17");
 
   pinMode     ( PIN_LED, OUTPUT );   
   digitalWrite( PIN_LED, LOW );
@@ -34,6 +33,7 @@ void setup() {
   setupTFT();
   setupEncoder();
   setupServo();
+  setupRS485( 19200 );
   
   delay(100);
 
@@ -43,7 +43,7 @@ void setup() {
 
 }
 
-// the loop function runs over and over again forever
+
 void loop() {
   uint16_t x, y;
   char str[16];
@@ -53,7 +53,7 @@ void loop() {
       tft.fillRect( x, y, 5, 5, TFT_YELLOW );
     }
     else {
-      servoSetPos( map(x, 0, 320, 0, 180) );
+      servoSetPos( map(x, 0, 320, 180, 0) );
       delay(50);
       servoON();
     }
@@ -76,10 +76,34 @@ void loop() {
   sprintf(str, "%5d", getPosEncoder());
   tft.print(str);
 
-  digitalWrite(PIN_LED, getSwitchEncoder());
+  if ( getSwitchEncoder() ) {
+    digitalWrite(PIN_LED, HIGH);
 
+    if ( getPosEncoder() != 0 ) {
+      int id=1;
+      int dir=(getPosEncoder() >= 0)?(1):(0);
+      int step=100*abs(getPosEncoder());
+      int ppr=1600;  // pulses per revolution
+      int rnd=millis()&0xFFF;
+      int csum=id+dir+step+ppr+rnd;
+      int go=1;
+      char s[256];
+      sprintf(s, "   {id:%d,dir:%d,step:%d,ppr:%d,rnd:%d,csum:%d}", id, dir, step, ppr, rnd, csum);
+      sendRS485Message(s, true);
+
+      id=0x100;     // broadcasting message
+      csum=id+go+rnd;
+      sprintf(s, "   {id:%d,go:%d,rnd:%d,csum:%d}", id, go, rnd, csum);
+      sendRS485Message(s, false);
+
+      setPosEncoder(0);
+    }
+  }
+  else {
+    digitalWrite(PIN_LED, LOW);
+  }
   
-  if (digitalRead(INPUT_REFILL)) {
+  if ( digitalRead(INPUT_REFILL) ) {
     tft.fillSmoothCircle(260, 110, 20, TFT_GREEN);
   }
   else {

@@ -20,6 +20,7 @@ void servoON() {
   digitalWrite( SERVO_POWER, HIGH );
 }
 
-void servoSetPos(int pos) {
+void servoSetPos(int pos) { 
+  /* pos in gradi da 0 a 180 */
   myServo.write(pos);
 }

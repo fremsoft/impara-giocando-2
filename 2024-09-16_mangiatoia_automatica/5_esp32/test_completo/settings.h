@@ -1,4 +1,5 @@
 #define PIN_LED      32
+// #define PIN_BUZZER   32   forse ci mettiamo un buzzer al posto del LED
 
 #define HX711_DT     35
 #define HX711_SCK    25
@@ -16,8 +17,7 @@
 #define SCREEN_H    240
 
 /*
-  non c'è SD CARD
-#define SD_CS        13
+#define SD_CS        13     non c'è SD CARD
 */
 
 #define ENCODER_A    36
@@ -28,4 +28,8 @@
 #define SERVO_POWER  26
 
 #define INPUT_REFILL 27
+
+#define RS485_RX     16
+#define RS485_TX     17
+#define RS485_TXEN   33
 

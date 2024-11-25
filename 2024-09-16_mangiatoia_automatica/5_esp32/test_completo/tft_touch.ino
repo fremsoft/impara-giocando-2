@@ -38,7 +38,7 @@ bool getTouchXY(uint16_t *retX, uint16_t *retY) {
 */
   if (z > 400) {
     *retX = constrain(map(y, 3700, 300, 0, 320), 0, 319);
-    *retY = constrain(map(x, 3800, 320, 0, 240), 0, 234);
+    *retY = constrain(map(x, 3800, 320, 0, 240), 0, 239);
     return true;
   }
   /* else */
