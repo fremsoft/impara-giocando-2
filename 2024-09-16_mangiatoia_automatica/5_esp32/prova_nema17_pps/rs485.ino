@@ -33,6 +33,8 @@ void sendRS485Message(String message, bool waitAck) {
   // Set the DE/DI pin LOW to enable receive mode
   digitalWrite(RS485_TXEN, LOW);
 
+  Serial.print("RX: ");
+
   if ( waitAck ) {
     t0 = millis();
     rx_index = 0;
@@ -40,6 +42,7 @@ void sendRS485Message(String message, bool waitAck) {
     do {
       if ( Serial2.available() != 0 ) {
         c = Serial2.read();
+        Serial.write(c);
         rx_buf[rx_index++] = c;
         if (rx_index >= RX_BUF_SIZE) { rx_index--; }
         rx_buf[rx_index] = 0;
@@ -49,6 +52,8 @@ void sendRS485Message(String message, bool waitAck) {
       }
     } while ((c != '}') && ((millis() - t0) < 1000) ); 
     // timeout 1000ms
+
+    Serial.println();
 
     // verifica che sia ACK=1
     // e gestire eventualmente la ritrasmissione 
