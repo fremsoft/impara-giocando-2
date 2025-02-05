@@ -82,7 +82,6 @@ void loop() {
 
       tft.setTextSize(5);
       sprintf(str, "Status");
-      tft.print(str);
       tft.drawString(str, 160, 90);
 
       if ((x > 5) && (x < 5+93) && (y > 160) && (y < 160+75)) {
@@ -105,7 +104,6 @@ void loop() {
       tft.setTextDatum(CC_DATUM);
       tft.setTextSize(5);
       sprintf(str, "Run");
-      tft.print(str);
       tft.drawString(str, 160, 90);
       break;
     case 3 : // erogazione in corso
@@ -119,7 +117,6 @@ void loop() {
       tft.setTextDatum(CC_DATUM);
       tft.setTextSize(5);
       sprintf(str, "Plan");
-      tft.print(str);
       tft.drawString(str, 160, 90);
       break;
     case 6 : // menu impostazioni
@@ -129,7 +126,6 @@ void loop() {
       tft.setTextDatum(CC_DATUM);
       tft.setTextSize(5);
       sprintf(str, "Settings");
-      tft.print(str);
       tft.drawString(str, 160, 90);
       break;
     case 7 : // impostazione orologio
