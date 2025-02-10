@@ -46,9 +46,7 @@
 #define FONT_MEDIUM  &FreeSans12pt7b
 #define FONT_LARGE   &FreeSans18pt7b
 #define FONT_BIG     &FreeSans24pt7b
-
-#define TFT_NAVY     0x2D91   /* #2e458d */
-
+                        
 #ifndef _STRUCT_PASTO_
 #define _STRUCT_PASTO_
 struct Pasto {

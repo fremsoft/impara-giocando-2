@@ -65,13 +65,8 @@ void salvataggioDatiNV() {
       Serial.println("NVS inizializzato correttamente.");
 
       // SCRIVO I NUOVI DATI
-      preferences.begin("storage", false);
       preferences.clear();
       
-#if 0
-preferences.end(); return; // cancella storage
-#endif
-
       // assicura che non usera' mai piu' i dati di default
       preferences.putBool("prima_scrittura", false);
 

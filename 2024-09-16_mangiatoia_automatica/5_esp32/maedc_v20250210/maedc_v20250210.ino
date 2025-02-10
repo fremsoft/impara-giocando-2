@@ -26,7 +26,7 @@ extern int16_t yOffset;
 void setup() {
 
   Serial.begin( 115200 );
-  printFreeRAM();
+  //printFreeRAM();
 
   pinMode     ( PIN_BUZZER, OUTPUT );   
   digitalWrite( PIN_BUZZER, LOW );
@@ -44,7 +44,7 @@ void setup() {
 
   delay( 3000 );
 
-  printFreeRAM();
+  //printFreeRAM();
 }
 
 int c=0;
@@ -87,8 +87,6 @@ void loop() {
 
       tftBuffStartScreen();
       
-      tftBuff.pushImage(46, 11 - yOffset, 32, 32, (uint16_t *)_back_32x32_map);
-
       // CASELLA SELEZIONE GRAMMI
       tftBuff.fillSmoothRoundRect(30, 65-yOffset, 160, 50,  5, TFT_NAVY);
       tftBuff.fillSmoothRoundRect(31, 66-yOffset, 158, 48,  3, TFT_WHITE);
@@ -111,22 +109,75 @@ void loop() {
       break;
 
     case 3 : // erogazione in corso
-    delay(1000); actualScreen = nextScreen = 1;
+      delay(1000); actualScreen = nextScreen = 1;
       break;
 
     case 4 : // finito di erogare le crocchette
       break;
 
     case 5 : // programmazione dei pasti
-      tftBuff.fillSprite(TFT_WHITE);
-
-      tftBuff.setTextColor(TFT_BLACK, TFT_WHITE);
-      tftBuff.setTextDatum(CC_DATUM);
-      tftBuff.setFreeFont( FONT_BIG );
-      sprintf(str, "Plan");
-      tftBuff.drawString(str, 160, 90-yOffset);
+      /*grammi = getPosEncoder();
+      if (grammi < 1) { grammi = 1; setPosEncoder(grammi); }
+      if (grammi > MAX_PORZIONE_GRAMMI) { grammi = MAX_PORZIONE_GRAMMI; setPosEncoder(grammi); }
+      */
       
-      tftBuff.pushSprite(0, yOffset);
+      tftBuffStartScreen();
+      
+      for (int i=0; i<5; i++) {
+        struct Pasto p = getPasto(i);
+
+        // NUMERO DELLA RICETTA
+        tftBuff.setTextColor(TFT_NAVY, TFT_WHITE);
+        tftBuff.setTextDatum(CC_DATUM);
+        tftBuff.setFreeFont( FONT_MEDIUM );
+        sprintf(str, "%d", i+1);
+        tftBuff.drawString(str, 3+(30/2), 45+(34/2) + (38*i) - yOffset);
+
+        tftBuff.setTextColor(TFT_NAVY, TFT_WHITE);
+        tftBuff.setTextDatum(CC_DATUM);
+        tftBuff.setFreeFont( FONT_MEDIUM );
+        tftBuff.drawString(":", 83+(14/2), 45+(34/2) + (38*i) - yOffset);
+
+        // CASELLA DELLE ORE 
+        tftBuff.fillSmoothRoundRect(35, 46 + (38*i) - yOffset, 50, 34,  5, TFT_NAVY);
+        tftBuff.fillSmoothRoundRect(36, 47 + (38*i) - yOffset, 48, 32,  3, TFT_WHITE);
+      
+        tftBuff.setTextColor(TFT_NAVY, TFT_WHITE);
+        tftBuff.setTextDatum(CC_DATUM);
+        tftBuff.setFreeFont( FONT_MEDIUM );
+        sprintf(str, "%2d", p.ora);
+        tftBuff.drawString(str, 35 + (50/2), 45 + (38*i) + (34/2) - yOffset);
+
+        // CASELLA DEI MINUTI
+        tftBuff.fillSmoothRoundRect(96, 46 + (38*i) - yOffset, 50, 34,  5, TFT_NAVY);
+        tftBuff.fillSmoothRoundRect(97, 47 + (38*i) - yOffset, 48, 32,  3, TFT_WHITE);
+      
+        tftBuff.setTextColor(TFT_NAVY, TFT_WHITE);
+        tftBuff.setTextDatum(CC_DATUM);
+        tftBuff.setFreeFont( FONT_MEDIUM );
+        sprintf(str, "%02d", p.minuti);
+        tftBuff.drawString(str, 96 + (50/2), 45 + (38*i) + (34/2) - yOffset);
+
+        // CASELLA DEI GRAMMI
+        tftBuff.fillSmoothRoundRect(160, 46 + (38*i) - yOffset, 94, 34,  5, TFT_NAVY);
+        tftBuff.fillSmoothRoundRect(161, 47 + (38*i) - yOffset, 92, 32,  3, TFT_WHITE);
+      
+        tftBuff.setTextColor(TFT_NAVY, TFT_WHITE);
+        tftBuff.setTextDatum(CC_DATUM);
+        tftBuff.setFreeFont( FONT_MEDIUM );
+        sprintf(str, "%dg", p.grammi);
+        tftBuff.drawString(str, 160 + (94/2), 45 + (38*i) + (34/2) - yOffset);
+
+        // PULSANTE ACTIVE
+        if (p.attivo) {
+          tftBuff.pushImage(264, 47 + (38*i) - yOffset, 32, 32, (uint16_t *)_check_32x32_map);
+        }
+        else {
+          tftBuff.pushImage(264, 47 + (38*i) - yOffset, 32, 32, (uint16_t *)_not_check_32x32_map);
+        }
+      }
+
+      tftBuffEndScreen();
       break;
 
     case 6 : // menu impostazioni

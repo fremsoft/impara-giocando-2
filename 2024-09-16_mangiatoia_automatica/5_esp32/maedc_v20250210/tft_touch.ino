@@ -65,7 +65,16 @@ void tftBuffStartScreen(void) {
   char str[16];
 
   tftBuff.fillSprite(TFT_WHITE);
-  tftBuff.pushImage(0, 156 - yOffset, SCREEN_W, SCREEN_H, (uint16_t *)_screen1_320x84_map);
+
+  if ( (actualScreen == 1) || (actualScreen == 2) || (actualScreen == 3) ) {
+    // PULSANTI RUN, PLAN, SETTINGS
+    tftBuff.pushImage(0, 156 - yOffset, SCREEN_W, SCREEN_H, (uint16_t *)_screen1_320x84_map);
+  }
+
+  if ( (actualScreen == 2) || (actualScreen == 5) || (actualScreen == 6) ) {
+    // TASTO BACK
+    tftBuff.pushImage(46, 11 - yOffset, 32, 32, (uint16_t *)_back_32x32_map);
+  }
 
   if (checkWiFiConnection()) {
     tftBuff.pushImage(11, 11 - yOffset, 32, 32, (uint16_t *)_wifi_32x32_map);
