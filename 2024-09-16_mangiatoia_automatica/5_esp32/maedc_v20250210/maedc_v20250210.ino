@@ -2,7 +2,7 @@
 // per erogare fino a 5 pasti al giorno.
 //
 // Guarda la lezione integrale:
-// https://youtube.com/live/JDVK9Ja8ZW0
+// https://youtube.com/live/gxMmNqdsiB8
 
 // Questo sketch usa le seguenti librerie:
 //  - TFT_eSPI by Bodmer                 v2.5.43 (per TFT e TOUCH)
