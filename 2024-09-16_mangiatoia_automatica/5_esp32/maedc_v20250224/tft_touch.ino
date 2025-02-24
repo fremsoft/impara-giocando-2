@@ -150,14 +150,6 @@ void tftBuffEndScreen(void) {
     // HO PREMUTO UNA CASELLA ORE NELLA PAGINA PLAN
     int el = constrain((touchY - 46) / (38), 0, 4) * 3;
     if (el != currentElement) { 
-      struct Pasto p;
-      int n = constrain(currentElement / 3, 0, 4);
-      p = getPasto(n);
-      p.ora = elementValues[n*3];
-      p.minuti = elementValues[n*3 + 1];
-      p.grammi = elementValues[n*3 + 2];
-      setPasto( n, p );
-
       currentElement = el;
       setPosEncoder(elementValues[currentElement]);
     }
@@ -167,14 +159,6 @@ void tftBuffEndScreen(void) {
     // HO PREMUTO UNA CASELLA MINUTI NELLA PAGINA PLAN
     int el = constrain((touchY - 46) / (38), 0, 4) * 3 + 1;
     if (el != currentElement) { 
-      struct Pasto p;
-      int n = constrain(currentElement / 3, 0, 4);
-      p = getPasto(n);
-      p.ora = elementValues[n*3];
-      p.minuti = elementValues[n*3 + 1];
-      p.grammi = elementValues[n*3 + 2];
-      setPasto( n, p );
-
       currentElement = el;
       setPosEncoder(elementValues[currentElement]);
     }
@@ -184,14 +168,6 @@ void tftBuffEndScreen(void) {
     // HO PREMUTO UNA CASELLA GRAMMI NELLA PAGINA PLAN
     int el = constrain((touchY - 46) / (38), 0, 4) * 3 + 2;
     if (el != currentElement) { 
-      struct Pasto p;
-      int n = constrain(currentElement / 3, 0, 4);
-      p = getPasto(n);
-      p.ora = elementValues[n*3];
-      p.minuti = elementValues[n*3 + 1];
-      p.grammi = elementValues[n*3 + 2];
-      setPasto( n, p );
-
       currentElement = el;
       setPosEncoder(elementValues[currentElement]);
     }
@@ -293,7 +269,12 @@ void tftBuffEndScreen(void) {
     // cambio schermata solo al rilascio del touch :)
     actualScreen = nextScreen;
 
-    if ( actualScreen == 7 ) { setTimeURL(nextString); }
+    if ( actualScreen == 5 ) {
+      if (currentElement < 0) { currentElement = -1; }
+    }
+    if ( actualScreen == 7 ) { 
+      setTimeURL(nextString); 
+    }
     if ( actualScreen == 8 ) { 
       if (currentElement == 1) { setSSID(nextString); }
       if (currentElement == 2) { setPasswd(nextString); }

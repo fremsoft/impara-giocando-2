@@ -119,7 +119,7 @@ void loop() {
 
     case 5 : // programmazione dei pasti
       /* currentElement e' il campo che sto editando 
-        -1 (nessuno)
+        -1 o comunque un numero negativo (nessuno)
          0 = ore    1 = minuti     2 = porzione   1' pasto
          3 = ore    4 = minuti     5 = porzione   2' pasto
          6 = ore    7 = minuti     8 = porzione   3' pasto
@@ -244,7 +244,7 @@ void loop() {
     case 7 : // impostazione orologio
       elementValues[0] = getPosEncoder(); 
       if (elementValues[0] < 32) { elementValues[0] = 32; setPosEncoder(elementValues[0]); }
-      if (elementValues[0] > 255) { elementValues[0] = 255; setPosEncoder(elementValues[0]); }
+      if (elementValues[0] > 127) { elementValues[0] = 255; setPosEncoder(elementValues[0]); }
       
       tftBuffStartScreen();
       
@@ -266,7 +266,7 @@ void loop() {
         xCursor += tftBuff.drawChar(strTmp[i], xCursor, yCursor - yOffset);
       }
 
-      if ((millis() % 600) > 300) {
+      if ((millis() % 1000) > 600) {
         tftBuff.fillRect(xCursor, 57 - yOffset, 20, 28, TFT_NAVY);
         tftBuff.setTextColor(TFT_WHITE, TFT_NAVY);
         tftBuff.drawChar(elementValues[0], xCursor + 2, yCursor - yOffset);
@@ -280,7 +280,7 @@ void loop() {
     case 8 : // impostazione WiFi
       elementValues[0] = getPosEncoder(); 
       if (elementValues[0] < 32) { elementValues[0] = 32; setPosEncoder(elementValues[0]); }
-      if (elementValues[0] > 255) { elementValues[0] = 255; setPosEncoder(elementValues[0]); }
+      if (elementValues[0] > 127) { elementValues[0] = 255; setPosEncoder(elementValues[0]); }
       
       tftBuffStartScreen();
       
@@ -303,7 +303,7 @@ void loop() {
       }
 
       if (currentElement == 1) {
-        if ((millis() % 600) > 300) {
+        if ((millis() % 1000) > 600) {
           tftBuff.fillRect(xCursor, 57 - yOffset, 20, 28, TFT_NAVY);
           tftBuff.setTextColor(TFT_WHITE, TFT_NAVY);
           tftBuff.drawChar(elementValues[0], xCursor + 2, yCursor - yOffset);
@@ -330,7 +330,7 @@ void loop() {
       }
 
       if (currentElement == 2) {
-        if ((millis() % 600) > 300) {
+        if ((millis() % 1000) > 600) {
           tftBuff.fillRect(xCursor, 102 - yOffset, 20, 28, TFT_NAVY);
           tftBuff.setTextColor(TFT_WHITE, TFT_NAVY);
           tftBuff.drawChar(elementValues[0], xCursor + 2, yCursor - yOffset);
@@ -358,7 +358,7 @@ void loop() {
       tftBuff.drawString("START", 55, 175-yOffset);
       //tftBuff.drawString("STOP", 55, 175-yOffset);
 
-      // PULSANTE START STOP COCLEA
+      // PULSANTE OPEN CLOSE SPORTELLINI
       tftBuff.fillSmoothCircle(155, 175-yOffset, 47, TFT_NAVY);
       tftBuff.fillSmoothCircle(155, 175-yOffset, 44, TFT_GREEN);
       tftBuff.setTextDatum(CC_DATUM);

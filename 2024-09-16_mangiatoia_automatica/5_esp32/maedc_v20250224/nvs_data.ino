@@ -142,7 +142,7 @@ Pasto getPasto(int indice) {
 }
 
 void setPasto(int indice, Pasto p) {
-  bool diversi= false;
+  bool diversi = false;
   
   if (pasti[indice].ora != p.ora) { diversi = true; }
   else 
