@@ -61,3 +61,10 @@ struct Pasto {
 
 #define DEG_SERVO_CHIUSO   10
 #define DEG_SERVO_APERTO   180
+
+#define SPEED_COCLEA_VELOCE   800
+#define SPEED_COCLEA_LENTO    500
+#define SPEED_COCLEA_FERMO      0
+
+#define MARGINE_PESATURA_VELOCITA_G  5
+#define MAX_PESO_PER_PESATA_G       50

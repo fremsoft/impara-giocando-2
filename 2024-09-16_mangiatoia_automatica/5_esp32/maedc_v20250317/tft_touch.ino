@@ -16,6 +16,12 @@ extern int ora_ore, ora_minuti;
 extern int statoCoclea;   // 0 = ferma, 1 = in movimento
 extern int statoServo;    // 0 = chiuso, 1 = aperto
 extern int degServo; 
+extern int statoErogazioneCibo; // 0 = riposo; 
+                                // 1 = apertura sportellino (chiude diaframma)
+                                // 2 = erogazione cibo
+                                // 3 = scarico cibo (chiusura sportellino)
+extern uint16_t grammiDaErogare; 
+
 
 void setupTFT() {
   // Inizializzazione TFT
@@ -145,8 +151,12 @@ void tftBuffEndScreen(void) {
       && ( ((touchX > 210) && (touchX < 210+80) && (touchY > 65) && (touchY < 65+50)) 
            || getSwitchEncoder() ) ) {
     // HO PREMUTO GO o IL TASTO DELL'ENCODER NELLA PAGINA RUN
-    nextScreen = 3;
     setGrammiPastoNow(getPosEncoder());
+    
+    statoErogazioneCibo = 0;  // 0 = riposo; 
+    grammiDaErogare = getGrammiPastoNow();
+
+    nextScreen = 3;
   } 
   else if ( ( (actualScreen == 5) )
       && ((touchX > 35) && (touchX < 35+50) && (touchY > 46) && (touchY < 46+(38*5))) ) {
@@ -267,18 +277,9 @@ void tftBuffEndScreen(void) {
       && ((touchX > (55-(90/2))) && (touchX < (55+(90/2))) && (touchY > (175-(90/2))) && (touchY < (175+(90/2)))) ) {
     // HO PREMUTO IL PULSANTE START/STOP
     //statoCoclea = !statoCoclea;
-    if(statoCoclea == 0) { statoCoclea = 1; } else { statoCoclea = 0; }
+    if(statoCoclea == 0) { statoCoclea = SPEED_COCLEA_VELOCE; } else { statoCoclea = 0; }
     
-    int id=1;
-    int dir=1;     // avanti
-    int ppr=1600;  // pulses per revolution
-    int pps=800*statoCoclea;   // pulses per second
-    int rnd=millis()&0xFFF;
-    int csum=id+dir+ppr+pps+rnd;
-    char s[256];
-    sprintf(s, "   {id:%d,dir:%d,ppr:%d,pps:%d,rnd:%d,csum:%d}", id, dir, ppr, pps, rnd, csum);
-    sendRS485Message(s, true);
-    delay(500);
+    speedCoclea( statoCoclea );
   } 
   else if ( ( actualScreen == 9 )
       && ((touchX > (155-(90/2))) && (touchX < (155+(90/2))) && (touchY > (175-(90/2))) && (touchY < (175+(90/2)))) ) {

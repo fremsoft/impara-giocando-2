@@ -1,4 +1,4 @@
-esp32 dev// Programma di gestione della scheda MAEDC v1.1
+// Programma di gestione della scheda MAEDC v1.1
 // per erogare fino a 5 pasti al giorno.
 //
 // Guarda la lezione integrale:
@@ -21,9 +21,18 @@ extern TFT_eSprite tftBuff;
 extern int actualScreen, nextScreen, currentElement, currentChar;
 extern int16_t yOffset, elementValues[15];
 
-int statoCoclea;   // 0 = ferma,  1 = in movimento
+int statoCoclea;   // 0 = ferma,  n = speed
+
 int statoServo;    // 0 = chiuso, 1 = aperto
 int degServo; 
+
+int statoErogazioneCibo; // 0 = riposo; 
+                         // 1 = apertura sportellino (chiude diaframma)
+                         // 2 = erogazione cibo
+                         // 3 = scarico cibo (chiusura sportellino)
+uint16_t grammiDaErogare; 
+
+uint32_t t0;
 
 void setup() {
 
@@ -47,8 +56,14 @@ void setup() {
   delay( 3000 );
 
   statoCoclea = 0;  // ferma
+
   statoServo  = 0;  // chiuso
   degServo = DEG_SERVO_CHIUSO;
+
+  statoErogazioneCibo = 0; // 0 = riposo; 
+  grammiDaErogare = 0;
+
+  t0 = 0;
 
   servoON();
   servoSetPos(degServo);
@@ -63,7 +78,8 @@ void loop() {
   String strTmp;
   char str[16];
   int32_t grammi;
-  int el, xCursor, yCursor;      
+  int el, xCursor, yCursor;  
+  int degSetPoint;    
 
   // YOFFSET
   // serve per disegnare mezza schermata alla volta poiche' 
@@ -122,10 +138,145 @@ void loop() {
       break;
 
     case 3 : // erogazione in corso
-      delay(1000); actualScreen = nextScreen = 1;
+      if ((grammiDaErogare != 0 ) || (statoErogazioneCibo != 0)) {
+        // devo erogare le crocchette
+        if (statoErogazioneCibo == 1) {
+          // 1 = apertura sportellino (chiude diaframma)
+          degSetPoint = DEG_SERVO_APERTO;
+          
+          if ( degSetPoint != degServo ) {
+            if (degSetPoint > degServo) { degServo ++; }
+            if (degSetPoint < degServo) { degServo --; }
+
+            servoSetPos(degServo);
+            //delay(10);
+          }
+          else {
+            delay(100);
+            servoOFF();
+
+            setTara();
+            do {
+              getPeso();
+            } while (abs (getPesoNettoFiltrato()) > 1.0);
+
+            statoErogazioneCibo = 2;
+          }         
+        }
+        else 
+        if (statoErogazioneCibo == 2)  {
+          // 2 = erogazione cibo
+          uint16_t p;
+          getPeso();
+          p = (uint16_t)getPesoNettoFiltrato();
+          if ((p < grammiDaErogare) && (p < MAX_PESO_PER_PESATA_G)) {
+            // devo erogare
+            if ( p < (grammiDaErogare-MARGINE_PESATURA_VELOCITA_G)) {
+              // potrei andare veloce
+              if ( p < (MAX_PESO_PER_PESATA_G-MARGINE_PESATURA_VELOCITA_G)) {
+                // posso andare veloce
+                if (statoCoclea != SPEED_COCLEA_VELOCE) {
+                  statoCoclea = SPEED_COCLEA_VELOCE;
+                  speedCoclea( statoCoclea );
+                }
+              }
+              else {
+                // devo andare lento  
+                if (statoCoclea != SPEED_COCLEA_LENTO) {
+                  statoCoclea = SPEED_COCLEA_LENTO;
+                  speedCoclea( statoCoclea );
+                }
+              }
+            }
+            else {
+              // devo andare lento
+              if (statoCoclea != SPEED_COCLEA_LENTO) {
+                statoCoclea = SPEED_COCLEA_LENTO;
+                speedCoclea( statoCoclea );
+              }
+            }
+          }
+          else {
+            // devo scaricare
+            statoCoclea = SPEED_COCLEA_FERMO;
+            speedCoclea( statoCoclea );
+ 
+            if (grammiDaErogare < p) {
+              grammiDaErogare = 0;
+            }
+            else {
+              grammiDaErogare = grammiDaErogare - p;
+            }
+
+            servoON();
+            delay(100);  
+
+            statoErogazioneCibo = 3;
+          }
+        }
+        else
+        if (statoErogazioneCibo == 3) {
+          // 3 = scarico cibo (chiusura sportellino)
+          degSetPoint = DEG_SERVO_CHIUSO;
+          
+          if ( degSetPoint != degServo ) {
+            if (degSetPoint > degServo) { degServo ++; }
+            if (degSetPoint < degServo) { degServo --; }
+
+            servoSetPos(degServo);
+            //delay(10);
+          }
+          else {
+            delay(100);
+            servoOFF();
+
+            delay(1000);           
+
+            statoErogazioneCibo = 0;
+          }
+        }
+        else /* if (statoErogazioneCibo == 0) */ {
+          // 0 = riposo
+
+          servoON();
+          delay(100);  
+
+          statoErogazioneCibo = 1;
+        }
+      }
+      else {
+        // erogazione terminata
+
+        servoOFF();
+        speedCoclea( SPEED_COCLEA_FERMO );
+
+        t0 = millis();
+        actualScreen = nextScreen = 4;
+      } 
+
+      tftBuffStartScreen();
+
+      tftBuff.setTextDatum(CC_DATUM);
+      tftBuff.setFreeFont( FONT_BIG );
+      sprintf(str, "%.1fg / %ug", getPesoNettoFiltrato(), grammiDaErogare);
+      tftBuff.drawString(str, 160, 90-yOffset);
+
+      tftBuffEndScreen();
       break;
 
     case 4 : // finito di erogare le crocchette
+      tftBuffStartScreen();
+
+      tftBuff.setTextDatum(CC_DATUM);
+      tftBuff.setFreeFont( FONT_BIG );
+      sprintf(str, "Buon appetito!");
+      tftBuff.drawString(str, 160, 90-yOffset);
+
+      tftBuffEndScreen();
+
+      if ((millis() - t0) > 3000) {
+        actualScreen = nextScreen = 1;
+      }
       break;
 
     case 5 : // programmazione dei pasti

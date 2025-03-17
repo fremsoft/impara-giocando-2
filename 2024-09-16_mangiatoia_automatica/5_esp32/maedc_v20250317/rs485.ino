@@ -63,3 +63,17 @@ char * RS485Buffer() {
   return rx_buf;
 }
 
+void speedCoclea(int speed) {
+  int id=1;
+  int dir=1;       // avanti
+  int ppr=1600;    // pulses per revolution
+  int pps=speed;   // pulses per second
+  int rnd=millis()&0xFFF;
+  int csum=id+dir+ppr+pps+rnd;
+  char s[256];
+  
+  sprintf(s, "   {id:%d,dir:%d,ppr:%d,pps:%d,rnd:%d,csum:%d}", id, dir, ppr, pps, rnd, csum);
+  sendRS485Message(s, true);
+  delay(500);      
+}
+
