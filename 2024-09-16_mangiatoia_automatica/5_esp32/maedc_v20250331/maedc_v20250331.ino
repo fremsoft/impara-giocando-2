@@ -73,11 +73,13 @@ void setup() {
   t_ultima_erogazione_minuti = -1;
   minuti_day_old = -1;
 
+  speedCoclea( statoCoclea );
+  
   servoON();
   servoSetPos(degServo);
   delay(1000);
   servoOFF();
-  
+
   //printFreeRAM();
 }
 
@@ -135,7 +137,7 @@ void loop() {
 
         if ( minuti_temp >= (24*60) ) {
           // non ha trovato un pasto disponibile
-          sprintf(str, "Attesa mezzanotte");
+          sprintf(str, "Attesa h24");
 
           if (minuti_day_old > minuti_now) {
             // e' passata la mezzanotte
@@ -298,7 +300,7 @@ void loop() {
             delay(100);
             servoOFF();
 
-            delay(1000);           
+            delay(2000);           
 
             statoErogazioneCibo = 0;
           }
