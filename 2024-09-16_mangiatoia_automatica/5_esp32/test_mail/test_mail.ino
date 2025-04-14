@@ -1,9 +1,10 @@
-// Programma di test invio delle email con ESP32 per scheda MAEDC v1.1
+// Programma di test invio delle email 
+// con ESP32 per scheda MAEDC v1.1
 //
 // guarda la lezione integrale:
 // https://youtube.com/live/tBNVI0FuGFo
 
-// Questo sketch usa la seguente libreria:
+// Questo sketch usa la seguente libreria SMTP:
 //  - ESP Mail Client  Ver.3.4.24 https://github.com/mobizt/ESP-Mail-Client.git
 //    Autore: Mobizt ( suwatchai@outlook.com )
 
@@ -21,10 +22,9 @@
 //#define SMTP_PASSWORD    "Password SMTP2GO"
 
 #define SMTP_SERVER       "mail.smtp2go.com";
-/*  25  or esp_mail_smtp_port_25
- * 465 or esp_mail_smtp_port_465
- * 587 or esp_mail_smtp_port_587
- */
+/*   25  or esp_mail_smtp_port_25
+ *  465 or esp_mail_smtp_port_465
+ *  587 or esp_mail_smtp_port_587   */
 #define SMTP_PORT         esp_mail_smtp_port_587
 #define VERIFIED_SENDER   "smtp2go@fremsoft.it" 
 #define MAIL_TO_NAME      "Emanuele Frisoni"
@@ -86,24 +86,23 @@ void setup() {
   // smtp.setTCPTimeout(10);
 
   /* Connect to the server */
-  if (!smtp.connect(&config))
-  {
+  if (!smtp.connect(&config)) {
     MailClient.printf("Connection error, Status Code: %d, Error Code: %d, Reason: %s\n", smtp.statusCode(), smtp.errorCode(), smtp.errorReason().c_str());
     return;
   }
 
-  if (!smtp.isLoggedIn())
-  {
+  if (!smtp.isLoggedIn()) {
     Serial.println("Error, Not yet logged in.");
   }
-  else
-  {
+  else {
     if (smtp.isAuthenticated()) { Serial.println("Successfully logged in."); }
     else { Serial.println("Connected with no Auth."); }
   }
 
   // Invia l'email
-  if (!MailClient.sendMail(&smtp, &message)) {
+
+  MailClient.sendMail(&smtp, &message);
+  if ((smtp.statusCode() == 221) && (smtp.errorCode() == 0)) {
     Serial.println("Email inviata con successo!");
   } else {
     MailClient.printf("Errore nell'invio dell'email, Status Code: %d, Error Code: %d, Reason: %s\n", 
