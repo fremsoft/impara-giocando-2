@@ -1,3 +1,12 @@
+// Programma di test invio delle email con ESP32 per scheda MAEDC v1.1
+//
+// guarda la lezione integrale:
+// https://youtube.com/live/tBNVI0FuGFo
+
+// Questo sketch usa la seguente libreria:
+//  - ESP Mail Client  Ver.3.4.24 https://github.com/mobizt/ESP-Mail-Client.git
+//    Autore: Mobizt ( suwatchai@outlook.com )
+
 #include <Arduino.h>
 #include <WiFi.h>
 //#include <time.h>
