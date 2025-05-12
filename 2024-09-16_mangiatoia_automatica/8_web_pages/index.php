@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MAEDC - Stato Mangiatoia</title>
+  <title>#MAEDC - Stato Mangiatoia</title>
   <style>
+    /* css */
     body {
       margin: 0;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -28,12 +29,13 @@
     }
 
     .image-container {
-      width: 100%;
+	  width: 100%;
       max-width: 400px;
       margin: 20px 0;
     }
 
     .image-container img {
+      background: white;
       width: 100%;
       height: auto;
       border-radius: 20px;
@@ -136,23 +138,58 @@
   <img src="https://fremsoft.it/imparagiocando/images/maedc_300x410.png" alt="Immagine della Mangiatoia">
 </div>
 
+<?php
+
+/* Guarda la lezione integrale: https://youtube.com/live/F3zWKNczNNs */
+$file_json  = "status_maedc.json";
+
+$status_json = file_get_contents($file_json);
+$status_data = json_decode($status_json, true);
+
+// Verifica se il JSON è valido
+if (json_last_error() !== JSON_ERROR_NONE) {
+    die("Errore nel decodificare il JSON.");
+}
+
+// Estrai i dati dal JSON
+$presenza_cibo = ($status_data['cibo']==1)?("Presente"):("Assente");
+$quantita_ultimo_pasto = ($status_data['ultimo_pasto']['quantita'])."&nbsp;g";
+$data_ora_ultimo_pasto = ($status_data['ultimo_pasto']['data_ora']);
+$stato = ($status_data['stato']=="OK")?("<span class='ok'>OK</span>"):("<span class='alarm'>".$status_data['stato']."</span>");
+$allarme = ((!empty($status_data['allarme']))&&($status_data['allarme']!=="Nessun allarme"))
+           ?("<div class='status-item alarm'>⚠️ Allarme:".$status_data['allarme']."</div>")
+           :("");
+		   
+// Calcolo stato connessione basato sul timestamp del file
+$last_update = filemtime($file_json);
+$now = time();
+$seconds_since_update = $now - $last_update;
+
+// "Segnale di vita" almeno ogni 15 minuti
+$connessione = ($seconds_since_update <= 60*1) 
+    ? "<span class='ok'>Online</span>"
+    : "<span class='alarm'>Offline</span>";
+$connessione .= " <small>(".$seconds_since_update."s fa)</small>";
+?>
+
 <div class="status-container">
   <div class="status-item">
-    <span class="status-label">Presenza Cibo:</span> Presente
+    <span class="status-label">Presenza Cibo:</span> <?php echo $presenza_cibo; ?>
   </div>
   <div class="status-item">
-    <span class="status-label">Quantità Ultimo Pasto:</span> 120g
+    <span class="status-label">Quantità Ultimo Pasto:</span> <?php echo $quantita_ultimo_pasto; ?>
   </div>
   <div class="status-item">
-    <span class="status-label">Connessione:</span> <span class="ok">Online</span>
+    <span class="status-label">Data/Ora:</span> <?php echo $data_ora_ultimo_pasto; ?>
   </div>
   <div class="status-item">
-    <span class="status-label">Stato:</span> <span class="ok">OK</span>
+    <span class="status-label">Connessione:</span> <?php echo $connessione; ?>
+  </div>
+  <div class="status-item">
+    <span class="status-label">Stato:</span> <?php echo $stato; ?>
   </div>
   <!-- Se allarme attivo -->
-  <div class="status-item alarm">
-    ⚠️ Allarme: Cibo esaurito
-  </div>
+  <?php echo $allarme; ?>
 </div>
 
 <div class="actions-container">
@@ -166,6 +203,8 @@
 
 <footer>
   &copy; 2025 Impara Giocando - Tutti i diritti riservati
+  
+  <a href="https://youtube.com/live/RrfQHqaGorw">Guarda la lezione integrale</a>
 </footer>
 
 <script>
