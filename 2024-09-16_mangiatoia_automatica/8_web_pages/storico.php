@@ -107,7 +107,7 @@
   </table>
 </div>
 
-<a class="button" href="https://fremsoft.it/imparagiocando/index.php">⬅️ Torna al Monitoraggio</a>
+<a class="button" href="https://fremsoft.it/imparagiocando/maedc/index.php">⬅️ Torna al Monitoraggio</a>
 
 <footer>
   &copy; 2025 Impara Giocando - Tutti i diritti riservati

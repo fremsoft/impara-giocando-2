@@ -135,7 +135,7 @@
 </header>
 
 <div class="image-container">
-  <img src="https://fremsoft.it/imparagiocando/images/maedc_300x410.png" alt="Immagine della Mangiatoia">
+  <img src="https://fremsoft.it/imparagiocando/maedc/images/maedc_300x410.png" alt="Immagine della Mangiatoia">
 </div>
 
 <?php
@@ -193,7 +193,7 @@ $connessione .= " <small>(".$seconds_since_update."s fa)</small>";
 </div>
 
 <div class="actions-container">
-  <a class="button" href="https://fremsoft.it/imparagiocando/storico.php">📜 Storico Pasti</a>
+  <a class="button" href="https://fremsoft.it/imparagiocando/maedc/storico.php">📜 Storico Pasti</a>
   
   <div style="margin-top: 20px;">
     <div><input type="number" id="quantita" min="0" max="500" step="10" value="0"> grammi</div>
@@ -209,26 +209,22 @@ $connessione .= " <small>(".$seconds_since_update."s fa)</small>";
 
 <script>
   function erogaCibo() {
-    const quantita = document.getElementById('quantita').value;
+	  
+	const quantita = parseInt(document.getElementById('quantita').value);
     if (!quantita || quantita <= 0) {
       alert('Inserisci una quantità valida!');
       return;
     }
 
-    // Esempio POST finto (da adattare)
-    /*
-    fetch('/eroga', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quantita: quantita })
-    }).then(response => {
-      if (response.ok) {
-        alert('Erogazione avviata con successo!');
-      } else {
-        alert('Errore durante l\'erogazione!');
-      }
-    });
-    */
+	const key = 'fremsoft';
+	fetch(`api.php?key=${key}&erogasubito=${quantita}`)
+      .then(response => response.text())
+      .then(data => { alert('Comando inviato: ' + data); })
+      .catch(error => {
+        console.error('Errore nella richiesta:', error);
+        alert('Errore durante la richiesta.');
+      });
+	  
   }
   
   setTimeout(function() { window.location.reload(); }, 10000);

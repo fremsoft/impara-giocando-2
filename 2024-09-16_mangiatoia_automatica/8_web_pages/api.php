@@ -1,8 +1,9 @@
 <?php
 // --- CONFIG ---
 $secret_key = "fremsoft";
-$file_csv   = "storico_dati.csv";
 $file_json  = "status_maedc.json";
+$file_cmd   = "eroga_subito.json";
+$file_csv   = "storico_dati.csv";
 
 // --- CHECK PARAMS ---
 if (!isset($_GET['key']) || $_GET['key'] !== $secret_key) {
@@ -42,7 +43,51 @@ if (isset($_GET['status'])) {
     // Scrive il file JSON (leggibile e UTF-8 safe)
     file_put_contents($file_json, $status_json);
 
-    die( "OK: status aggiornato.\n" );
+    //die( "OK: status aggiornato.\n" );
+	
+	// --- Verifica presenza comando erogasubito ---
+	header('Content-Type: application/json');    
+    if (file_exists($file_cmd)) {
+        echo file_get_contents($file_cmd);
+        exit;
+    } else {
+        $data = [ 'timestamp' => 0,	'quantita' => 0 ];
+		$json_data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+		echo $json_data;
+        exit;
+    }
+}
+
+if (isset($_GET['erogasubito'])) {
+    $quantita = intval($_GET['erogasubito']);
+    
+    if (($quantita <= 0) || ($quantita > 500)) {
+        http_response_code(400);
+        die("Quantità non valida.");
+    }
+
+    $data = [
+        'timestamp' => time(),
+        'quantita' => $quantita
+    ];
+
+    $json_data = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+
+    if (file_put_contents($file_cmd, $json_data)) {
+        die("OK: comando registrato.");
+    } else {
+        http_response_code(500);
+        die("Errore nel salvataggio.");
+    }
+} 
+
+if (isset($_GET['cancella_erogasubito'])) {
+    if (file_exists($file_cmd)) {
+        unlink($file_cmd);
+        die("OK: file comando cancellato.\n");
+    } else {
+        die("Nessun comando da cancellare.\n");
+    }
 }
 
 if (!isset($_GET['quantita'])) {
