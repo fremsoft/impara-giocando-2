@@ -41,6 +41,8 @@ if (isset($_GET['status'])) {
     }
 
     // Scrive il file JSON (leggibile e UTF-8 safe)
+	$decoded['timestamp'] = time(); 
+	$status_json = json_encode($decoded, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
     file_put_contents($file_json, $status_json);
 
     //die( "OK: status aggiornato.\n" );

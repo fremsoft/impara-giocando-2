@@ -166,30 +166,30 @@ $now = time();
 $seconds_since_update = $now - $last_update;
 
 // "Segnale di vita" almeno ogni 15 minuti
-$connessione = ($seconds_since_update <= 60*1) 
+$connessione = ($seconds_since_update <= 60*15) 
     ? "<span class='ok'>Online</span>"
     : "<span class='alarm'>Offline</span>";
 $connessione .= " <small>(".$seconds_since_update."s fa)</small>";
 ?>
 
-<div class="status-container">
+<div id="status-container" class="status-container">
   <div class="status-item">
-    <span class="status-label">Presenza Cibo:</span> <?php echo $presenza_cibo; ?>
+    <span class="status-label">Presenza Cibo:</span> <span id="presenza_cibo"><?php echo $presenza_cibo; ?></span>
   </div>
   <div class="status-item">
-    <span class="status-label">Quantità Ultimo Pasto:</span> <?php echo $quantita_ultimo_pasto; ?>
+    <span class="status-label">Quantità Ultimo Pasto:</span> <span id="quantita_ultimo_pasto"><?php echo $quantita_ultimo_pasto; ?></span>
   </div>
   <div class="status-item">
-    <span class="status-label">Data/Ora:</span> <?php echo $data_ora_ultimo_pasto; ?>
+    <span class="status-label">Data/Ora:</span> <span id="data_ora_ultimo_pasto"><?php echo $data_ora_ultimo_pasto; ?></span>
   </div>
   <div class="status-item">
-    <span class="status-label">Connessione:</span> <?php echo $connessione; ?>
+    <span class="status-label">Connessione:</span> <span id="connessione"><?php echo $connessione; ?></span>
   </div>
   <div class="status-item">
-    <span class="status-label">Stato:</span> <?php echo $stato; ?>
+    <span class="status-label">Stato:</span> <span id="stato"><?php echo $stato; ?></span>
   </div>
   <!-- Se allarme attivo -->
-  <?php echo $allarme; ?>
+   <div id="allarme"><?php echo $allarme; ?></div>
 </div>
 
 <div class="actions-container">
@@ -208,6 +208,40 @@ $connessione .= " <small>(".$seconds_since_update."s fa)</small>";
 </footer>
 
 <script>
+  function aggiornaStatus() {
+    fetch('status_maedc.json?t=' + new Date().getTime())
+	.then(response => {
+      if (!response.ok) throw new Error("Errore nel recupero dello status");
+      return response.json();
+    })
+    .then(data => {
+      // Aggiorna ciascun campo
+      document.getElementById("presenza_cibo").textContent = data.cibo ? "Presente" : "Assente";
+      document.getElementById("quantita_ultimo_pasto").textContent = data.ultimo_pasto.quantita + "g";
+      document.getElementById("data_ora_ultimo_pasto").textContent = data.ultimo_pasto.data_ora;
+	  
+      document.getElementById("stato").innerHTML = (data.stato == "OK")?"<span class='ok'>OK</span>":"<span class='error'>"+data.stato+"</span>";
+	  
+	  let allarme = "";
+	  if (data.allarme && data.allarme !== "Nessun allarme") {
+		  allarme = "<div class='status-item alarm'>⚠️ Allarme: " + data.allarme + "</div>";
+	  }
+      document.getElementById("allarme").innerHTML = allarme;
+	  
+      // Calcolo tempo trascorso
+      const timestamp = data.timestamp;
+      const now = Math.floor(Date.now() / 1000);
+      const diff = now - timestamp;
+
+      let conn = diff > (60*15) ? "<span class='alarm'>Offline</span>" : "<span class='ok'>Online</span>";
+      conn += ` <small>(${diff}s fa)</small>`;
+      document.getElementById("connessione").innerHTML = conn;
+    })
+    .catch(error => {
+      console.error("Errore nel caricamento dello status:", error);
+    });
+  }
+
   function erogaCibo() {
 	  
 	const quantita = parseInt(document.getElementById('quantita').value);
@@ -227,7 +261,9 @@ $connessione .= " <small>(".$seconds_since_update."s fa)</small>";
 	  
   }
   
-  setTimeout(function() { window.location.reload(); }, 10000);
+  setInterval( aggiornaStatus, 10000 );
+  /* setTimeout( function() { window.location.reload(); }, 10000); */
+    
 </script>
 
 </body>
