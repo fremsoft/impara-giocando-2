@@ -18,10 +18,7 @@
 
 extern TFT_eSPI tft;
 
-#include "settings.h"
-
 void setup() {
-
   Serial.begin(115200);
 
   pinMode     ( PIN_LED, OUTPUT );   
@@ -40,7 +37,6 @@ void setup() {
   tft.fillSmoothRoundRect(20,  30, 280, 20,  5, TFT_RED);
   tft.fillSmoothRoundRect(80,  80, 140, 60, 20, TFT_BLACK);
   tft.fillSmoothRoundRect(80, 145, 140, 60, 20, TFT_BLACK);
-
 }
 
 
