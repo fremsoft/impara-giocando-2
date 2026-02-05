@@ -26,3 +26,15 @@ curl http://worldtimeapi.org/api/timezone/Europe/Rome
 	"dst_until":"2024-10-27T01:00:00+00:00",
 	"client_ip":"x.x.x.x"
 }
+
+oppure
+https://timeapi.io/api/v1/time/current/zone?timezone=Europe%2FRome
+{
+	"date_time":"2026-02-05T15:02:29.058851+01:00",
+	"date":"2026-02-05",
+	"time":"15:02:29.058851",
+	"day_of_week":"Thursday",
+	"dst_active":false,
+	"timezone":"Europe/Rome",
+	"utc_offset_seconds":3600
+}
